@@ -19,5 +19,11 @@
     }
   },
   "packageManager": "pnpm@12.6.0",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "kysely": "^0.29.6"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
 }
