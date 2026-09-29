@@ -2,8 +2,9 @@
   "name": "financial-management-service",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "check:types": "pnpm -r check:types",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
