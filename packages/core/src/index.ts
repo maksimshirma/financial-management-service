@@ -1,8 +1,8 @@
 export {
   AccountsTable,
   CategoriesTable,
+  Currency,
   SecuritiesTable,
-  SharedEnum,
   TradesTable,
   TransactionsTable,
 } from "./domain";

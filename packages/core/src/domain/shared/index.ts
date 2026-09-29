@@ -1,1 +1,1 @@
-export enum SharedEnum {}
+export * from "./currency";
