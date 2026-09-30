@@ -184,6 +184,28 @@ importers:
         specifier: ^8.11.0
         version: 8.23.0
     devDependencies:
+      '@fms/fixtures':
+        specifier: workspace:*
+        version: link:../fixtures
+      '@types/node':
+        specifier: ^26.6.3
+        version: 26.6.3
+      '@types/pg':
+        specifier: ^8.11.0
+        version: 8.23.1
+      tsx:
+        specifier: ^4.19.0
+        version: 4.23.15
+
+  packages/fixtures:
+    dependencies:
+      kysely:
+        specifier: ^0.29.6
+        version: 0.29.6
+      pg:
+        specifier: ^8.11.0
+        version: 8.23.0
+    devDependencies:
       '@types/node':
         specifier: ^26.6.3
         version: 26.6.3

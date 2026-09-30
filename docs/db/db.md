@@ -37,6 +37,8 @@ docker compose up -d
 
 Работа с БД из кода (Kysely, `@fms/db`, миграции) — [`kysely.md`](./kysely.md).
 
+Тестовая БД для интеграционных тестов (`@fms/fixtures`) — [`fixtures.md`](./fixtures.md).
+
 ## ER-диаграмма
 
 ```mermaid
