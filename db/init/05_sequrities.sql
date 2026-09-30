@@ -7,5 +7,6 @@ CREATE TABLE securities (
     currency      currency NOT NULL DEFAULT 'RUB',
     face_value    DECIMAL(14,2),  -- номинал облигации
     coupon_rate   DECIMAL(6,3),   -- % годовых
-    maturity_date DATE            -- дата погашения
+    maturity_date DATE,            -- дата погашения
+    is_archived BOOLEAN NOT NULL DEFAULT false
 );

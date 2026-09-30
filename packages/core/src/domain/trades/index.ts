@@ -17,3 +17,5 @@ export interface TradesTable {
   accrued_interest: number;
   fee: number;
 }
+
+export type NewTrade = Omit<TradesTable, "trade_id">;

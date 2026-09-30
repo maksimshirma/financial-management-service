@@ -16,3 +16,5 @@ export interface AccountsTable {
   currency: Currency;
   is_archived: boolean;
 }
+
+export type NewAccount = Omit<AccountsTable, "account_id">;

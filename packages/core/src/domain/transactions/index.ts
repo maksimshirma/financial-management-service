@@ -14,3 +14,5 @@ export interface TransactionsTable {
   security_id?: SecuritiesTable["security_id"];
   note?: string;
 }
+
+export type NewTransaction = Omit<TransactionsTable, "transaction_id">;

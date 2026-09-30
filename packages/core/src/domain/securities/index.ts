@@ -16,4 +16,7 @@ export interface SecuritiesTable {
   face_value?: number;
   coupon_rate?: number;
   maturity_date?: Date;
+  is_archived: boolean;
 }
+
+export type NewSecurity = Omit<SecuritiesTable, "security_id">;
