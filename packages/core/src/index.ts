@@ -1,20 +1,25 @@
-export {
+export type {
   AccountsTable,
-  AccountType,
   CategoriesTable,
-  CategoryType,
-  Currency,
-  DuplicateEntryError,
-  InvalidTransactionError,
   NewAccount,
   NewCategory,
   NewSecurity,
   NewTrade,
   NewTransaction,
-  NotFoundError,
   SecuritiesTable,
-  SecurityType,
   TradesTable,
-  TradeType,
   TransactionsTable,
 } from "./domain";
+
+export {
+  AccountType,
+  CategoryType,
+  Currency,
+  DuplicateEntryError,
+  InvalidTransactionError,
+  NotFoundError,
+  SecurityType,
+  TradeType,
+} from "./domain";
+
+export type * from "./application/ports";
