@@ -10,6 +10,7 @@
     "migrate": "tsx src/migrations/run.ts"
   },
   "dependencies": {
+    "@fms/config": "workspace:*",
     "@fms/core": "workspace:*",
     "kysely": "^0.29.6",
     "pg": "^8.11.0"

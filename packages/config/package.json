@@ -1,0 +1,14 @@
+{
+  "name": "@fms/config",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3"
+  }
+}

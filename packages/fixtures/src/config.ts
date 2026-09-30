@@ -1,23 +1,21 @@
-import { fileURLToPath } from "node:url";
+import { getEnv } from "@fms/config";
 import { PoolConfig } from "pg";
 
-process.loadEnvFile(fileURLToPath(new URL("../../../.env", import.meta.url)));
-
 export function testDatabaseName(): string {
-  return `${process.env.POSTGRES_DB}_test`;
+  return `${getEnv("POSTGRES_DB")}_test`;
 }
 
 function baseConfig(): Omit<PoolConfig, "database"> {
   return {
-    host: process.env.POSTGRES_HOST ?? "localhost",
-    port: Number(process.env.POSTGRES_PORT),
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
+    host: getEnv("POSTGRES_HOST") ?? "localhost",
+    port: Number(getEnv("POSTGRES_PORT")),
+    user: getEnv("POSTGRES_USER"),
+    password: getEnv("POSTGRES_PASSWORD"),
   };
 }
 
 export function adminDatabaseConfig(): PoolConfig {
-  return { ...baseConfig(), database: process.env.POSTGRES_DB };
+  return { ...baseConfig(), database: getEnv("POSTGRES_DB") };
 }
 
 export function testDatabaseConfig(): PoolConfig {

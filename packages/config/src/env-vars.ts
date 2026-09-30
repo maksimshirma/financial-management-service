@@ -1,0 +1,13 @@
+export const ENV_VARS = [
+  "POSTGRES_DB",
+  "POSTGRES_DB_CONTAINER_NAME",
+  "POSTGRES_USER",
+  "POSTGRES_PASSWORD",
+  "POSTGRES_PORT",
+  "POSTGRES_HOST",
+  "PGADMIN_EMAIL",
+  "PGADMIN_PASSWORD",
+  "PGADMIN_PORT",
+] as const;
+
+export type EnvVarName = (typeof ENV_VARS)[number];

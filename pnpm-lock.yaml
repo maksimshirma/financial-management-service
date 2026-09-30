@@ -182,10 +182,19 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
+  packages/config:
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.3
+        version: 26.6.3
+
   packages/core: {}
 
   packages/db:
     dependencies:
+      '@fms/config':
+        specifier: workspace:*
+        version: link:../config
       '@fms/core':
         specifier: workspace:*
         version: link:../core
@@ -211,6 +220,9 @@ importers:
 
   packages/fixtures:
     dependencies:
+      '@fms/config':
+        specifier: workspace:*
+        version: link:../config
       kysely:
         specifier: ^0.29.6
         version: 0.29.6

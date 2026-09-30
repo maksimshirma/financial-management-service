@@ -13,6 +13,13 @@ module.exports = {
   maxWorkers: 1,
   projects: [
     {
+      displayName: "@fms/config",
+      rootDir: "<rootDir>/packages/config",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/__jest__/**/*.test.ts"],
+      transform: { "^.+\\.(t|j)s$": swcTransform },
+    },
+    {
       displayName: "@fms/db",
       rootDir: "<rootDir>/packages/db",
       testEnvironment: "node",
