@@ -20,20 +20,22 @@ docker compose up -d
 
 ## Файлы инициализации
 
-| Файл | Назначение |
-|---|---|
-| `01_enums.sql` | ENUM-типы: `currency`, `account_type`, `category_type`, `security_type`, `trade_type` |
-| `02_users.sql` | таблица `users` |
-| `03_accounts.sql` | таблица `accounts` |
-| `04_categories.sql` | таблица `categories` |
-| `05_sequrities.sql` | таблица `securities` |
-| `06_transactions.sql` | таблица `transactions` |
-| `07_trades.sql` | таблица `trades` |
-| `08_seed.sql` | тестовые данные |
+| Файл                  | Назначение                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| `01_enums.sql`        | ENUM-типы: `currency`, `account_type`, `category_type`, `security_type`, `trade_type` |
+| `02_users.sql`        | таблица `users`                                                                       |
+| `03_accounts.sql`     | таблица `accounts`                                                                    |
+| `04_categories.sql`   | таблица `categories`                                                                  |
+| `05_sequrities.sql`   | таблица `securities`                                                                  |
+| `06_transactions.sql` | таблица `transactions`                                                                |
+| `07_trades.sql`       | таблица `trades`                                                                      |
+| `08_seed.sql`         | тестовые данные                                                                       |
 
 Подробное описание таблиц и связей — [`schema.md`](./schema.md).
 
 Веб-интерфейс для БД (pgAdmin) — [`pgadmin.md`](./pgadmin.md).
+
+Работа с БД из кода (Kysely, `@fms/db`, миграции) — [`kysely.md`](./kysely.md).
 
 ## ER-диаграмма
 
