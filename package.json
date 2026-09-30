@@ -4,6 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
+    "build": "pnpm -r build",
     "check:types": "pnpm -r check:types",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
@@ -21,9 +22,6 @@
   },
   "packageManager": "pnpm@12.6.0",
   "type": "module",
-  "dependencies": {
-    "kysely": "^0.29.6"
-  },
   "devDependencies": {
     "typescript": "^7.0.2"
   }

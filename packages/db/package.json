@@ -1,0 +1,22 @@
+{
+  "name": "@fms/db",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit",
+    "migrate": "tsx src/migrations/run.ts"
+  },
+  "dependencies": {
+    "@fms/core": "workspace:*",
+    "kysely": "^0.29.6",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/pg": "^8.11.0",
+    "tsx": "^4.19.0"
+  }
+}
