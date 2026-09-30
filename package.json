@@ -6,6 +6,7 @@
   "scripts": {
     "build": "pnpm -r build",
     "check:types": "pnpm -r check:types",
+    "test": "jest",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
@@ -23,6 +24,10 @@
   "packageManager": "pnpm@12.6.0",
   "type": "module",
   "devDependencies": {
+    "@swc/core": "^1.9.0",
+    "@swc/jest": "^0.2.37",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
     "typescript": "^7.0.2"
   }
 }
