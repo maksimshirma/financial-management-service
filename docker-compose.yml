@@ -53,6 +53,35 @@ services:
         condition: service_healthy
     stdin_open: true
 
+  # Streamable HTTP MCP server — unlike `mcp` above, this one is a
+  # legitimate long-running daemon (no stdin to pipe), meant for locally
+  # smoke-testing the HTTP transport before picking a remote host later.
+  # Same image/Dockerfile as `mcp`; transport mode is selected at runtime
+  # via MCP_TRANSPORT. Gated behind its own profile so a plain
+  # `pnpm docker:up` never exposes it — opt in with:
+  #   docker compose --profile mcp-http up -d mcp-http
+  mcp-http:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    image: fms-mcp:local
+    profiles: ["mcp-http"]
+    restart: unless-stopped
+    environment:
+      MCP_TRANSPORT: http
+      MCP_API_KEY: ${MCP_API_KEY}
+      PORT: "3000"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${MCP_HTTP_PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pg-data:
     name: pg-data

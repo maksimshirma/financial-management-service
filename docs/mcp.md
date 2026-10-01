@@ -1,6 +1,6 @@
 # `@fms/mcp` — запуск и подключение
 
-MCP-сервер на `@modelcontextprotocol/sdk` (v1), stdio-транспорт. 27 tool'ов — по одному на каждый use-case из `@fms/core` (accounts/categories/securities/transactions/trades). Устройство пакета — см. код: `packages/mcp/src/server.ts` (композиция), `main.ts` (композиционный корень), `tools/**` (сами tool'ы).
+MCP-сервер на `@modelcontextprotocol/sdk` (v1). Поддерживает два транспорта: **stdio** (по умолчанию, для локальных клиентов типа Claude Desktop/Code — см. ниже) и **Streamable HTTP** (`MCP_TRANSPORT=http`, для удалённого доступа по URL — см. раздел «HTTP-режим»). 27 tool'ов — по одному на каждый use-case из `@fms/core` (accounts/categories/securities/transactions/trades). Устройство пакета — см. код: `packages/mcp/src/server.ts` (композиция, транспорт-агностична), `main.ts` (композиционный корень, выбирает транспорт по `MCP_TRANSPORT`), `http-transport.ts` (Express-обвязка HTTP-режима), `tools/**` (сами tool'ы).
 
 Сервер деплоится и запускается через **Docker** — это основной способ. Голый `tsx`/`node` без контейнера остаётся только для локальной разработки самого `@fms/mcp` (правка кода тулов и быстрая проверка без пересборки образа).
 
@@ -72,9 +72,14 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | docker compose --profile
       "command": "docker",
       "args": [
         "compose",
-        "--project-directory", "/Users/maksim/Projects/Code/active/financial-management-service",
-        "--profile", "mcp",
-        "run", "--rm", "-i", "mcp"
+        "--project-directory",
+        "/Users/maksim/Projects/Code/active/financial-management-service",
+        "--profile",
+        "mcp",
+        "run",
+        "--rm",
+        "-i",
+        "mcp"
       ]
     }
   }
@@ -112,6 +117,87 @@ claude mcp add fms -- docker compose --profile mcp run --rm -i mcp
 
 После смены конфига (`.mcp.json` или образа) переподключение подхватывается на следующий рестарт клиента/сессии — текущая открытая сессия продолжает работать со старым процессом до перезапуска.
 
+## HTTP-режим (удалённый доступ по URL)
+
+Stdio-транспорт требует, чтобы клиент сам спавнил процесс и подключал к нему свои stdin/stdout — работает только там, где можно запустить произвольную команду (Claude Desktop/Code с установленным Docker). **Streamable HTTP**-транспорт убирает это требование: сервер крутится постоянно где-то одном месте, а любой MCP-совместимый агент (включая хостед/веб-агентов, которые не могут спавнить локальный процесс) просто добавляет его по URL.
+
+Сервер в HTTP-режиме **stateless** — на каждый HTTP-запрос создаётся свежий `McpServer` + свежий `StreamableHTTPServerTransport` (SDK сам бросает исключение при попытке переиспользовать stateless transport между запросами), без session-машинерии. Это нормально: сервер никогда не шлёт server-initiated нотификации, только отвечает на запросы.
+
+Включается через env:
+
+| Переменная      | Значение                 | Смысл                                                                                                                                           |
+| --------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MCP_TRANSPORT` | `http`                   | без неё (или `stdio`) — поведение не меняется, это дефолт                                                                                       |
+| `MCP_API_KEY`   | длинная случайная строка | **обязательна** в HTTP-режиме — сервер откажется стартовать без неё (fail fast, никогда не поднимется неавторизованным публичным листенером)    |
+| `PORT`          | например `3000`          | порт, который слушает Express; дефолт `3000`. Это имя — конвенция большинства PaaS-хостов (Fly.io/Railway/Render), которые сами его прокидывают |
+
+Авторизация — один общий секрет, `Authorization: Bearer <MCP_API_KEY>`, сравнение простым строковым равенством (`packages/mcp/src/http-transport.ts`). Это осознанный компромисс для single-tenant личного сервера, а не полноценный multi-tenant access control — если сервер когда-нибудь будет обслуживать больше одного доверенного клиента, стоит пересмотреть (constant-time compare, разные ключи на клиента).
+
+### Локальный smoke-тест
+
+Сервис `mcp-http` в `docker-compose.yml` — в отличие от `mcp`, это обычный демон (`restart: unless-stopped`), сидит за своим профилем `profiles: ["mcp-http"]`, чтобы не включаться при голом `pnpm docker:up`:
+
+```bash
+# в .env: MCP_API_KEY=<сгенерированный секрет>, например:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+docker compose --profile mcp-http up -d mcp-http
+docker compose logs -f mcp-http   # ждём "listening on :3000"
+```
+
+```bash
+# без токена — 401
+curl -i http://localhost:3000/mcp \
+  -X POST -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```bash
+# с токеном — 200 + список tool'ов. Заголовок accept обязателен — без него
+# StreamableHTTPServerTransport отвечает 406 (SDK требует, чтобы клиент
+# принимал оба формата: JSON-ответ и SSE-стрим).
+curl -i http://localhost:3000/mcp \
+  -X POST \
+  -H "authorization: Bearer $MCP_API_KEY" \
+  -H 'content-type: application/json' \
+  -H 'accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+```bash
+# health-check без авторизации — 200
+curl -i http://localhost:3000/healthz
+```
+
+Остановить, не трогая `postgres`/`pgadmin`/`mcp`:
+
+```bash
+docker compose --profile mcp-http down mcp-http
+```
+
+### Где хостить (на будущее)
+
+Сам образ (`fms-mcp:local`, тот же `Dockerfile.mcp`) не меняется между режимами — выбор транспорта целиком на env-переменных, так что один и тот же образ едет куда угодно:
+
+- **VPS + reverse-proxy** (nginx/Caddy) — TLS-терминация перед plain-HTTP портом контейнера, полный контроль, больше ручной настройки.
+- **PaaS** (Fly.io, Railway, Render и т.п.) — HTTPS из коробки, обычно сами прокидывают `PORT` (поэтому эта конвенция и выбрана здесь).
+
+Сервер полностью stateless, так что при нескольких инстансах за балансировщиком не нужны sticky sessions или общее хранилище сессий.
+
+### Подключение удалённого агента
+
+> Иллюстративно, не истина в последней инстанции — конкретный формат `url`/заголовков авторизации в конфиге зависит от клиента и может меняться. Проверяй актуальную документацию того агента, который подключаешь, на момент подключения.
+
+```jsonc
+{
+  "mcpServers": {
+    "fms": {
+      "url": "https://<your-host>/mcp",
+      "headers": { "Authorization": "Bearer <MCP_API_KEY>" },
+    },
+  },
+}
+```
+
 ## Локальная разработка без Docker
 
 Пересобирать образ на каждую правку кода — медленно. Для итерации по самому `@fms/mcp` (или зависимым `core`/`db`/`config`) работай напрямую с `tsx`, без контейнера:
@@ -136,13 +222,13 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | pnpm exec tsx src/main.t
 
 ## Список tool'ов
 
-| Группа | Tool'ы |
-|---|---|
-| accounts | `create-account`, `update-account`, `archive-account`, `list-accounts`, `list-archived-accounts`, `get-account` |
-| categories | `create-category`, `update-category`, `archive-category`, `list-categories`, `list-archived-categories` |
-| securities | `create-security`, `update-security`, `archive-security`, `list-securities`, `list-archived-securities`, `find-security-by-ticker` |
-| transactions | `record-income-expense`, `transfer-between-accounts`, `update-transaction`, `delete-transaction`, `list-transactions` |
-| trades | `buy-security`, `sell-security`, `update-trade`, `delete-trade`, `list-trades` |
+| Группа       | Tool'ы                                                                                                                             |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| accounts     | `create-account`, `update-account`, `archive-account`, `list-accounts`, `list-archived-accounts`, `get-account`                    |
+| categories   | `create-category`, `update-category`, `archive-category`, `list-categories`, `list-archived-categories`                            |
+| securities   | `create-security`, `update-security`, `archive-security`, `list-securities`, `list-archived-securities`, `find-security-by-ticker` |
+| transactions | `record-income-expense`, `transfer-between-accounts`, `update-transaction`, `delete-transaction`, `list-transactions`              |
+| trades       | `buy-security`, `sell-security`, `update-trade`, `delete-trade`, `list-trades`                                                     |
 
 Имя tool'а = имя файла use-case'а в `packages/core/src/application/`, 1:1 — описание и точную схему аргументов смотри там же или через `tools/list`.
 
@@ -155,3 +241,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | pnpm exec tsx src/main.t
 - **Ошибка подключения к Postgres из контейнера** — `docker compose ps` (и `postgres`, и `mcp`-ран должны видеть сеть), проверить что `postgres` в статусе `healthy` (`depends_on: condition: service_healthy` у `mcp` должен это гарантировать сам, но если `pnpm docker:up` не выполнялся заранее — `docker compose --profile mcp run` поднимет и `postgres` тоже, просто с нуля, что медленнее).
 - **`pnpm install --frozen-lockfile` падает внутри `docker build`** — лок-файл не синхронен с `package.json` (забыли закоммитить/перегенерировать после правки зависимостей). Прогнать `pnpm install` локально, закоммитить `pnpm-lock.yaml`, пересобрать образ.
 - **Tool падает с `isError: true` и непонятным текстом** — это реальная ошибка домена (`@fms/core`), не транспорта. Текст — `.message` брошенного исключения (`NotFoundError`/`DuplicateEntryError`/`InvalidTransactionError`), там уже написано что не так (`"Account not found: 5"` и т.п.).
+- **401 на каждый запрос в HTTP-режиме** — проверить, что заголовок `Authorization: Bearer <...>` отправляется и токен совпадает с `MCP_API_KEY` контейнера (`docker compose exec mcp-http env | grep MCP_API_KEY` для сверки).
+- **`mcp-http` падает сразу после старта** — `MCP_API_KEY` не задан в `.env`/окружении (сервер намеренно отказывается стартовать без него в HTTP-режиме, см. лог контейнера).
+- **406 Not Acceptable в HTTP-режиме** — забыт заголовок `accept: application/json, text/event-stream` на запросе к `/mcp` — `StreamableHTTPServerTransport` требует явно принимать оба формата.
+- **`GET /mcp` → 405** — ожидаемо: эндпоинт принимает только `POST`. Этот сервер не шлёт server-initiated push/SSE-нотификации, которым был бы нужен `GET`.

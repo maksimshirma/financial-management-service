@@ -8,6 +8,9 @@ export const ENV_VARS = [
   "PGADMIN_EMAIL",
   "PGADMIN_PASSWORD",
   "PGADMIN_PORT",
+  "MCP_TRANSPORT",
+  "MCP_API_KEY",
+  "PORT",
 ] as const;
 
 export type EnvVarName = (typeof ENV_VARS)[number];
