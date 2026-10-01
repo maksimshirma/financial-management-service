@@ -9,11 +9,6 @@ import {
 
 type Numeric = ColumnType<number, number | string, number | string>;
 
-export interface UserRow {
-  user_id: Generated<number>;
-  name: string;
-}
-
 export interface AccountRow {
   account_id: Generated<number>;
   user_id: number;
@@ -69,7 +64,6 @@ export interface TradeRow {
 }
 
 export interface Database {
-  users: UserRow;
   accounts: AccountRow;
   categories: CategoryRow;
   securities: SecurityRow;

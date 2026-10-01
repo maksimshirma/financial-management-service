@@ -9,13 +9,8 @@ const repo = new KyselyAccountRepository(db);
 beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
-async function seedUser() {
-  const row = await db
-    .insertInto("users")
-    .values({ name: "Test User" })
-    .returningAll()
-    .executeTakeFirstOrThrow();
-  return row.user_id;
+function seedUser() {
+  return 1;
 }
 
 test("create returns the row with a generated id", async () => {

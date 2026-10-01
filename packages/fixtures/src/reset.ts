@@ -9,7 +9,6 @@ const schemaDir = fileURLToPath(new URL("../../../db/init", import.meta.url));
 // schema only — 08_seed.sql is skipped, tests create their own fixtures.
 const SCHEMA_FILES = [
   "01_enums.sql",
-  "02_users.sql",
   "03_accounts.sql",
   "04_categories.sql",
   "05_sequrities.sql",

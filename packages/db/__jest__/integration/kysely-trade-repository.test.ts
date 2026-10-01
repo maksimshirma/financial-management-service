@@ -10,10 +10,9 @@ beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
 async function seedAccount() {
-  const user = await db.insertInto("users").values({ name: "Test User" }).returningAll().executeTakeFirstOrThrow();
   const account = await db
     .insertInto("accounts")
-    .values({ user_id: user.user_id, name: "Broker", type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
+    .values({ user_id: 1, name: "Broker", type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
     .returningAll()
     .executeTakeFirstOrThrow();
   return account.account_id;

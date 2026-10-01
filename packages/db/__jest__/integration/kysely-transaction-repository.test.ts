@@ -9,9 +9,8 @@ const repo = new KyselyTransactionRepository(db);
 beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
-async function seedUser() {
-  const row = await db.insertInto("users").values({ name: "Test User" }).returningAll().executeTakeFirstOrThrow();
-  return row.user_id;
+function seedUser() {
+  return 1;
 }
 
 async function seedAccount(userId: number, name = "Cash") {
