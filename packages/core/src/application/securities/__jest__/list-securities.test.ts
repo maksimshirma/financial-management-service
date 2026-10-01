@@ -1,5 +1,5 @@
-import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository";
-import { listSecurities } from "../list-securities";
+import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository.js";
+import { listSecurities } from "../list-securities.js";
 
 describe("listSecurities", () => {
   it("delegates to securityRepo.listAll", async () => {

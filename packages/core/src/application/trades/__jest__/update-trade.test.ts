@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../domain";
-import { updateTrade } from "../update-trade";
-import { buildTrade, createMockTradeRepository } from "./mock-trade-repository";
+import { NotFoundError } from "../../../domain/index.js";
+import { updateTrade } from "../update-trade.js";
+import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.js";
 
 describe("updateTrade", () => {
   it("throws NotFoundError when the trade doesn't exist", async () => {

@@ -1,5 +1,5 @@
-import { AccountsTable } from "../../domain";
-import { AccountRepository } from "../ports";
+import { AccountsTable } from "../../domain/index.js";
+import { AccountRepository } from "../ports/index.js";
 
 export async function listArchivedAccounts(
   deps: { accountRepo: AccountRepository },

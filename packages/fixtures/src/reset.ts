@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client } from "pg";
-import { adminDatabaseConfig, testDatabaseConfig, testDatabaseName } from "./config";
+import { adminDatabaseConfig, testDatabaseConfig, testDatabaseName } from "./config.js";
 
 const schemaDir = fileURLToPath(new URL("../../../db/init", import.meta.url));
 

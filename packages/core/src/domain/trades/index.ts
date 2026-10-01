@@ -1,5 +1,5 @@
-import { AccountsTable } from "../accounts";
-import { SecuritiesTable } from "../securities";
+import { AccountsTable } from "../accounts/index.js";
+import { SecuritiesTable } from "../securities/index.js";
 
 export enum TradeType {
   BUY = "buy",

@@ -1,5 +1,5 @@
-import { archiveCategory } from "../archive-category";
-import { createMockCategoryRepository } from "./mock-category-repository";
+import { archiveCategory } from "../archive-category.js";
+import { createMockCategoryRepository } from "./mock-category-repository.js";
 
 describe("archiveCategory", () => {
   it("delegates to categoryRepo.archive", async () => {

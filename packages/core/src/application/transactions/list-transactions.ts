@@ -1,4 +1,4 @@
-import { TransactionFilter, TransactionRepository } from "../ports";
+import { TransactionFilter, TransactionRepository } from "../ports/index.js";
 
 export async function listTransactions(
   deps: { transactionRepo: TransactionRepository },

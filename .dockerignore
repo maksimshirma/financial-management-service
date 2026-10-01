@@ -1,0 +1,15 @@
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/__jest__
+.git
+.gitignore
+.env
+.env.example
+.mcp.json
+*.log
+db/
+docs/
+.claude/
+README.md
+CLAUDE.md

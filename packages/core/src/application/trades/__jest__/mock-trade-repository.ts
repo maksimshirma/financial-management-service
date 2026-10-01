@@ -1,5 +1,5 @@
-import { TradesTable, TradeType } from "../../../domain";
-import { TradeRepository } from "../../ports";
+import { TradesTable, TradeType } from "../../../domain/index.js";
+import { TradeRepository } from "../../ports/index.js";
 
 export function createMockTradeRepository(): jest.Mocked<TradeRepository> {
   return {

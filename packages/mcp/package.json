@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "./src/main.ts",
+  "main": "./dist/main.js",
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
     "check:types": "tsc --noEmit",
-    "start": "tsx src/main.ts"
+    "start": "node dist/main.js",
+    "dev": "tsx watch src/main.ts"
   },
   "dependencies": {
     "@fms/config": "workspace:*",

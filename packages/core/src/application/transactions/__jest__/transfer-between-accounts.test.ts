@@ -1,6 +1,6 @@
-import { InvalidTransactionError } from "../../../domain";
-import { transferBetweenAccounts } from "../transfer-between-accounts";
-import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository";
+import { InvalidTransactionError } from "../../../domain/index.js";
+import { transferBetweenAccounts } from "../transfer-between-accounts.js";
+import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository.js";
 
 describe("transferBetweenAccounts", () => {
   it("throws InvalidTransactionError when transferring to the same account", async () => {

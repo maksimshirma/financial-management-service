@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../domain";
-import { updateCategory } from "../update-category";
-import { buildCategory, createMockCategoryRepository } from "./mock-category-repository";
+import { NotFoundError } from "../../../domain/index.js";
+import { updateCategory } from "../update-category.js";
+import { buildCategory, createMockCategoryRepository } from "./mock-category-repository.js";
 
 describe("updateCategory", () => {
   it("throws NotFoundError when the category doesn't exist", async () => {

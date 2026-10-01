@@ -1,6 +1,6 @@
-import { Currency, SecurityType } from "../../../domain";
-import { createSecurity } from "../create-security";
-import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository";
+import { Currency, SecurityType } from "../../../domain/index.js";
+import { createSecurity } from "../create-security.js";
+import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository.js";
 
 describe("createSecurity", () => {
   it("builds a new security with is_archived defaulted to false", async () => {

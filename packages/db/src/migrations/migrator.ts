@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Kysely } from "kysely";
 import { FileMigrationProvider, Migrator } from "kysely/migration";
-import { Database } from "../../src/schema";
+import { Database } from "../../src/schema.js";
 
 const migrationFolder = path.dirname(fileURLToPath(import.meta.url));
 

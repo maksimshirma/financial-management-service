@@ -1,5 +1,5 @@
-import { recordIncomeExpense } from "../record-income-expense";
-import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository";
+import { recordIncomeExpense } from "../record-income-expense.js";
+import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository.js";
 
 describe("recordIncomeExpense", () => {
   it("creates an income/expense transaction with transfer fields unset", async () => {

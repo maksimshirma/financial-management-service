@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "fms": {
+      "command": "docker",
+      "args": ["compose", "--profile", "mcp", "run", "--rm", "-i", "mcp"]
+    }
+  }
+}

@@ -1,6 +1,6 @@
-import { CategoryType } from "../../../domain";
-import { createCategory } from "../create-category";
-import { buildCategory, createMockCategoryRepository } from "./mock-category-repository";
+import { CategoryType } from "../../../domain/index.js";
+import { createCategory } from "../create-category.js";
+import { buildCategory, createMockCategoryRepository } from "./mock-category-repository.js";
 
 describe("createCategory", () => {
   it("builds a new category with is_archived defaulted to false", async () => {

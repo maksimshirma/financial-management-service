@@ -1,5 +1,5 @@
-import { Currency, SecuritiesTable, SecurityType } from "../../../domain";
-import { SecurityRepository } from "../../ports";
+import { Currency, SecuritiesTable, SecurityType } from "../../../domain/index.js";
+import { SecurityRepository } from "../../ports/index.js";
 
 export function createMockSecurityRepository(): jest.Mocked<SecurityRepository> {
   return {

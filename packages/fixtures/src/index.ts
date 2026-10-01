@@ -1,3 +1,3 @@
-export { testDatabaseConfig, testDatabaseName } from "./config";
-export { resetTestDatabase } from "./reset";
-export { truncateAllTables } from "./truncate";
+export { testDatabaseConfig, testDatabaseName } from "./config.js";
+export { resetTestDatabase } from "./reset.js";
+export { truncateAllTables } from "./truncate.js";

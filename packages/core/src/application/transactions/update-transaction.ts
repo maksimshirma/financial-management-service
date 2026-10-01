@@ -1,5 +1,5 @@
-import { NotFoundError, TransactionsTable } from "../../domain";
-import { TransactionRepository } from "../ports";
+import { NotFoundError, TransactionsTable } from "../../domain/index.js";
+import { TransactionRepository } from "../ports/index.js";
 
 export interface UpdateTransactionInput {
   transactionId: TransactionsTable["transaction_id"];

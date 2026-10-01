@@ -32,7 +32,27 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    
+
+  # stdio MCP server — never a long-running daemon, so it's gated behind a
+  # profile and must be launched with `run`, never `up -d`:
+  #   docker compose --profile mcp run --rm -i mcp
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    image: fms-mcp:local
+    profiles: ["mcp"]
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    stdin_open: true
+
 volumes:
   pg-data:
     name: pg-data

@@ -1,5 +1,5 @@
-import { buildCategory, createMockCategoryRepository } from "./mock-category-repository";
-import { listArchivedCategories } from "../list-archived-categories";
+import { buildCategory, createMockCategoryRepository } from "./mock-category-repository.js";
+import { listArchivedCategories } from "../list-archived-categories.js";
 
 describe("listArchivedCategories", () => {
   it("delegates to categoryRepo.listArchived", async () => {

@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../domain";
-import { updateSecurity } from "../update-security";
-import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository";
+import { NotFoundError } from "../../../domain/index.js";
+import { updateSecurity } from "../update-security.js";
+import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository.js";
 
 describe("updateSecurity", () => {
   it("throws NotFoundError when the security doesn't exist", async () => {

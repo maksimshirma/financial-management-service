@@ -1,5 +1,5 @@
-import { buildAccount, createMockAccountRepository } from "./mock-account-repository";
-import { getAccount } from "../get-account";
+import { buildAccount, createMockAccountRepository } from "./mock-account-repository.js";
+import { getAccount } from "../get-account.js";
 
 describe("getAccount", () => {
   it("returns the account when found", async () => {

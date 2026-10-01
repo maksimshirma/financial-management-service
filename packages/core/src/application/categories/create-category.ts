@@ -1,5 +1,5 @@
-import { CategoryType, NewCategory } from "../../domain";
-import { CategoryRepository } from "../ports";
+import { CategoryType, NewCategory } from "../../domain/index.js";
+import { CategoryRepository } from "../ports/index.js";
 
 export interface CreateCategoryInput {
   name: string;

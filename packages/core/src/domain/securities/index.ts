@@ -1,4 +1,4 @@
-import { Currency } from "../shared";
+import { Currency } from "../shared/index.js";
 
 export enum SecurityType {
   STOCK = "stock",

@@ -5,8 +5,8 @@ import {
   NewCategory,
   NotFoundError,
 } from "@fms/core";
-import { Database } from "../schema";
-import { mapPgError } from "../errors";
+import { Database } from "../schema.js";
+import { mapPgError } from "../errors.js";
 
 export class KyselyCategoryRepository implements CategoryRepository {
   constructor(private readonly db: Kysely<Database>) {}

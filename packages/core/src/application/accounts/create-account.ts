@@ -1,5 +1,5 @@
-import { AccountType, Currency, NewAccount } from "../../domain";
-import { AccountRepository } from "../ports";
+import { AccountType, Currency, NewAccount } from "../../domain/index.js";
+import { AccountRepository } from "../ports/index.js";
 
 export interface CreateAccountInput {
   userId: NewAccount["user_id"];

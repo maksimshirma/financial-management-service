@@ -1,5 +1,5 @@
-import { archiveSecurity } from "../archive-security";
-import { createMockSecurityRepository } from "./mock-security-repository";
+import { archiveSecurity } from "../archive-security.js";
+import { createMockSecurityRepository } from "./mock-security-repository.js";
 
 describe("archiveSecurity", () => {
   it("delegates to securityRepo.archive", async () => {

@@ -1,5 +1,5 @@
-import { NewTransaction, TransactionsTable } from "../../domain";
-import { Clock, TransactionRepository } from "../ports";
+import { NewTransaction, TransactionsTable } from "../../domain/index.js";
+import { Clock, TransactionRepository } from "../ports/index.js";
 
 export interface RecordIncomeExpenseInput {
   accountId: TransactionsTable["account_id"];

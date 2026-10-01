@@ -1,5 +1,5 @@
-import { TradesTable } from "../../domain";
-import { TradeRepository } from "../ports";
+import { TradesTable } from "../../domain/index.js";
+import { TradeRepository } from "../ports/index.js";
 
 /** @throws {NotFoundError} trade does not exist */
 export async function deleteTrade(

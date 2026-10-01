@@ -9,7 +9,7 @@ import {
   KyselyTradeRepository,
   KyselyTransactionRepository,
 } from "@fms/db";
-import { createServer } from "./server";
+import { createServer } from "./server.js";
 
 async function main() {
   const db = createKyselyInstance({

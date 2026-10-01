@@ -1,5 +1,5 @@
-import { AccountsTable } from "../../domain";
-import { AccountRepository } from "../ports";
+import { AccountsTable } from "../../domain/index.js";
+import { AccountRepository } from "../ports/index.js";
 
 /** @throws {NotFoundError} account does not exist */
 export async function archiveAccount(

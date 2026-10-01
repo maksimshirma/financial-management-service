@@ -1,5 +1,5 @@
-import { AccountsTable, AccountType, Currency } from "../../../domain";
-import { AccountRepository } from "../../ports";
+import { AccountsTable, AccountType, Currency } from "../../../domain/index.js";
+import { AccountRepository } from "../../ports/index.js";
 
 export function createMockAccountRepository(): jest.Mocked<AccountRepository> {
   return {

@@ -1,5 +1,5 @@
-import { CategoriesTable, NotFoundError } from "../../domain";
-import { CategoryRepository } from "../ports";
+import { CategoriesTable, NotFoundError } from "../../domain/index.js";
+import { CategoryRepository } from "../ports/index.js";
 
 export interface UpdateCategoryInput {
   categoryId: CategoriesTable["category_id"];

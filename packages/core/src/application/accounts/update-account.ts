@@ -1,5 +1,5 @@
-import { AccountsTable, NotFoundError } from "../../domain";
-import { AccountRepository } from "../ports";
+import { AccountsTable, NotFoundError } from "../../domain/index.js";
+import { AccountRepository } from "../ports/index.js";
 
 export interface UpdateAccountInput {
   accountId: AccountsTable["account_id"];

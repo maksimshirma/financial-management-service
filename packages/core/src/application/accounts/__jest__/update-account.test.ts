@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../domain";
-import { updateAccount } from "../update-account";
-import { buildAccount, createMockAccountRepository } from "./mock-account-repository";
+import { NotFoundError } from "../../../domain/index.js";
+import { updateAccount } from "../update-account.js";
+import { buildAccount, createMockAccountRepository } from "./mock-account-repository.js";
 
 describe("updateAccount", () => {
   it("throws NotFoundError when the account doesn't exist", async () => {

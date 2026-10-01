@@ -1,5 +1,5 @@
-import { buildAccount, createMockAccountRepository } from "./mock-account-repository";
-import { listAccounts } from "../list-accounts";
+import { buildAccount, createMockAccountRepository } from "./mock-account-repository.js";
+import { listAccounts } from "../list-accounts.js";
 
 describe("listAccounts", () => {
   it("delegates to accountRepo.findAllByUser", async () => {

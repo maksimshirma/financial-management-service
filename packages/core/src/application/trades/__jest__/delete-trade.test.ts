@@ -1,5 +1,5 @@
-import { deleteTrade } from "../delete-trade";
-import { createMockTradeRepository } from "./mock-trade-repository";
+import { deleteTrade } from "../delete-trade.js";
+import { createMockTradeRepository } from "./mock-trade-repository.js";
 
 describe("deleteTrade", () => {
   it("delegates to tradeRepo.delete", async () => {

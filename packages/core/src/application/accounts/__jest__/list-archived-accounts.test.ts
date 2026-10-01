@@ -1,5 +1,5 @@
-import { buildAccount, createMockAccountRepository } from "./mock-account-repository";
-import { listArchivedAccounts } from "../list-archived-accounts";
+import { buildAccount, createMockAccountRepository } from "./mock-account-repository.js";
+import { listArchivedAccounts } from "../list-archived-accounts.js";
 
 describe("listArchivedAccounts", () => {
   it("delegates to accountRepo.findArchivedByUser", async () => {

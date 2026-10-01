@@ -1,4 +1,4 @@
-import { NewTrade, NotFoundError, TradesTable } from "../../domain";
+import { NewTrade, NotFoundError, TradesTable } from "../../domain/index.js";
 
 export interface TradeFilter {
   accountId?: TradesTable["account_id"];

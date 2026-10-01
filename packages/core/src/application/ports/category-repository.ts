@@ -3,7 +3,7 @@ import {
   DuplicateEntryError,
   NewCategory,
   NotFoundError,
-} from "../../domain";
+} from "../../domain/index.js";
 
 export interface CategoryRepository {
   findById(

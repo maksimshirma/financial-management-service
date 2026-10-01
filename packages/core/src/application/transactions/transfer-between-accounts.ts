@@ -2,8 +2,8 @@ import {
   InvalidTransactionError,
   NewTransaction,
   TransactionsTable,
-} from "../../domain";
-import { Clock, TransactionRepository } from "../ports";
+} from "../../domain/index.js";
+import { Clock, TransactionRepository } from "../ports/index.js";
 
 export interface TransferBetweenAccountsInput {
   accountId: TransactionsTable["account_id"];

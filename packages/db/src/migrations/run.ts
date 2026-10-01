@@ -1,6 +1,6 @@
 import { getEnv } from "@fms/config";
-import { createKyselyInstance } from "../kysely";
-import { createMigrator } from "./migrator";
+import { createKyselyInstance } from "../kysely.js";
+import { createMigrator } from "./migrator.js";
 
 async function main() {
   const db = createKyselyInstance({

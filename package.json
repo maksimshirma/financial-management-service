@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
+    "dev:build": "tsc -b --watch",
     "check:types": "pnpm -r check:types",
     "test": "jest",
     "docker:up": "docker-compose up -d",

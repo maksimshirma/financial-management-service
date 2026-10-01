@@ -1,5 +1,5 @@
-import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository";
-import { listTransactions } from "../list-transactions";
+import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository.js";
+import { listTransactions } from "../list-transactions.js";
 
 describe("listTransactions", () => {
   it("delegates the filter to transactionRepo.find", async () => {

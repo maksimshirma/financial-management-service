@@ -1,5 +1,5 @@
-import { Currency, NewSecurity, SecurityType } from "../../domain";
-import { SecurityRepository } from "../ports";
+import { Currency, NewSecurity, SecurityType } from "../../domain/index.js";
+import { SecurityRepository } from "../ports/index.js";
 
 export interface CreateSecurityInput {
   ticker: string;

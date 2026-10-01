@@ -1,4 +1,4 @@
-import { CategoryRepository } from "../ports";
+import { CategoryRepository } from "../ports/index.js";
 
 export async function listCategories(deps: {
   categoryRepo: CategoryRepository;

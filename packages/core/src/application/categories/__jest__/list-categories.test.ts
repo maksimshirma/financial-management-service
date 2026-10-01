@@ -1,5 +1,5 @@
-import { buildCategory, createMockCategoryRepository } from "./mock-category-repository";
-import { listCategories } from "../list-categories";
+import { buildCategory, createMockCategoryRepository } from "./mock-category-repository.js";
+import { listCategories } from "../list-categories.js";
 
 describe("listCategories", () => {
   it("delegates to categoryRepo.listAll", async () => {

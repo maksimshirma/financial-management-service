@@ -1,5 +1,5 @@
-import { buildTrade, createMockTradeRepository } from "./mock-trade-repository";
-import { listTrades } from "../list-trades";
+import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.js";
+import { listTrades } from "../list-trades.js";
 
 describe("listTrades", () => {
   it("delegates the filter to tradeRepo.find", async () => {

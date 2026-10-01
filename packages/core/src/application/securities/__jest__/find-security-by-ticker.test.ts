@@ -1,5 +1,5 @@
-import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository";
-import { findSecurityByTicker } from "../find-security-by-ticker";
+import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository.js";
+import { findSecurityByTicker } from "../find-security-by-ticker.js";
 
 describe("findSecurityByTicker", () => {
   it("returns the security when found", async () => {

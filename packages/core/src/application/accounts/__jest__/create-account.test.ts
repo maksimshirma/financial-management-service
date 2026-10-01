@@ -1,6 +1,6 @@
-import { AccountType, Currency } from "../../../domain";
-import { createAccount } from "../create-account";
-import { buildAccount, createMockAccountRepository } from "./mock-account-repository";
+import { AccountType, Currency } from "../../../domain/index.js";
+import { createAccount } from "../create-account.js";
+import { buildAccount, createMockAccountRepository } from "./mock-account-repository.js";
 
 describe("createAccount", () => {
   it("builds a new account with is_archived defaulted to false", async () => {

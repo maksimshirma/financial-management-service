@@ -1,5 +1,5 @@
-import { NotFoundError, TradesTable } from "../../domain";
-import { TradeRepository } from "../ports";
+import { NotFoundError, TradesTable } from "../../domain/index.js";
+import { TradeRepository } from "../ports/index.js";
 
 export interface UpdateTradeInput {
   tradeId: TradesTable["trade_id"];

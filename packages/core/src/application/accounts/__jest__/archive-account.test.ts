@@ -1,5 +1,5 @@
-import { archiveAccount } from "../archive-account";
-import { createMockAccountRepository } from "./mock-account-repository";
+import { archiveAccount } from "../archive-account.js";
+import { createMockAccountRepository } from "./mock-account-repository.js";
 
 describe("archiveAccount", () => {
   it("delegates to accountRepo.archive", async () => {

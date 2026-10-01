@@ -2,7 +2,7 @@ import {
   NewTransaction,
   NotFoundError,
   TransactionsTable,
-} from "../../domain";
+} from "../../domain/index.js";
 
 export interface TransactionFilter {
   accountId?: TransactionsTable["account_id"];

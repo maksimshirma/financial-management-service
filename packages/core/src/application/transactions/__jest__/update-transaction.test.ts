@@ -1,6 +1,6 @@
-import { NotFoundError } from "../../../domain";
-import { updateTransaction } from "../update-transaction";
-import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository";
+import { NotFoundError } from "../../../domain/index.js";
+import { updateTransaction } from "../update-transaction.js";
+import { buildTransaction, createMockTransactionRepository } from "./mock-transaction-repository.js";
 
 describe("updateTransaction", () => {
   it("throws NotFoundError when the transaction doesn't exist", async () => {

@@ -1,4 +1,4 @@
-import { TradeFilter, TradeRepository } from "../ports";
+import { TradeFilter, TradeRepository } from "../ports/index.js";
 
 export async function listTrades(
   deps: { tradeRepo: TradeRepository },

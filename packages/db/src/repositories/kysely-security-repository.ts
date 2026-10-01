@@ -5,8 +5,8 @@ import {
   SecuritiesTable,
   SecurityRepository,
 } from "@fms/core";
-import { Database, SecurityRow } from "../schema";
-import { mapPgError } from "../errors";
+import { Database, SecurityRow } from "../schema.js";
+import { mapPgError } from "../errors.js";
 
 // domain fields are optional (absent = undefined); the columns are nullable
 // (absent = null) — bridge the two directions here, once.

@@ -1,6 +1,6 @@
-import { TradeType } from "../../../domain";
-import { sellSecurity } from "../sell-security";
-import { buildTrade, createMockTradeRepository } from "./mock-trade-repository";
+import { TradeType } from "../../../domain/index.js";
+import { sellSecurity } from "../sell-security.js";
+import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.js";
 
 describe("sellSecurity", () => {
   it("creates a SELL trade with accruedInterest/fee defaulted to 0", async () => {

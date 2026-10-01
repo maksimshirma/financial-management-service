@@ -1,5 +1,5 @@
-import { TransactionsTable } from "../../../domain";
-import { TransactionRepository } from "../../ports";
+import { TransactionsTable } from "../../../domain/index.js";
+import { TransactionRepository } from "../../ports/index.js";
 
 export function createMockTransactionRepository(): jest.Mocked<TransactionRepository> {
   return {

@@ -1,6 +1,6 @@
-import { AccountsTable } from "../accounts";
-import { CategoriesTable } from "../categories";
-import { SecuritiesTable } from "../securities";
+import { AccountsTable } from "../accounts/index.js";
+import { CategoriesTable } from "../categories/index.js";
+import { SecuritiesTable } from "../securities/index.js";
 
 export interface TransactionsTable {
   transaction_id: number;

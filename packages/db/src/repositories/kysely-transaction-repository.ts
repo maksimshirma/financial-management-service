@@ -6,8 +6,8 @@ import {
   TransactionRepository,
   TransactionsTable,
 } from "@fms/core";
-import { Database, TransactionRow } from "../schema";
-import { mapPgError } from "../errors";
+import { Database, TransactionRow } from "../schema.js";
+import { mapPgError } from "../errors.js";
 
 // domain fields are optional (absent = undefined); the columns are nullable
 // (absent = null) — bridge the two directions here, once.

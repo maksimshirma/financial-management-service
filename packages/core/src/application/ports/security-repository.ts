@@ -3,7 +3,7 @@ import {
   NewSecurity,
   NotFoundError,
   SecuritiesTable,
-} from "../../domain";
+} from "../../domain/index.js";
 
 export interface SecurityRepository {
   findById(

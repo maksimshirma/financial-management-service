@@ -63,5 +63,5 @@ mcp   ← core, db
 
 - `pnpm -r build` — pnpm runs recursive scripts in workspace-dependency-topological order automatically (`core` builds before `db`, `db` before `http`/`mcp`).
 - Each package's `tsconfig.json` extends root `tsconfig.base.json`; use TS project references (`composite: true`, `references`) for cross-package `tsc -b` and editor go-to-definition.
-- Dev: `pnpm --filter @fms/http dev`, `pnpm --filter @fms/mcp dev` (e.g. `tsx watch src/main.ts` — resolves TS directly, no rebuild-from-dist needed).
+- Dev: each package's `main`/`exports` point at `dist`, so cross-package edits need `dist` kept fresh — run `pnpm dev:build` (`tsc -b --watch`, rebuilds every package incrementally via project references) in one terminal, and `pnpm --filter @fms/mcp dev` (`tsx watch src/main.ts`) in another for whichever adapter you're running.
 - `process.env` reads centralized in a `config` module per adapter (or a shared `@fms/config` package if env needs sharing across `http`/`mcp`/`db`).

@@ -1,5 +1,5 @@
-import { CategoriesTable, CategoryType } from "../../../domain";
-import { CategoryRepository } from "../../ports";
+import { CategoriesTable, CategoryType } from "../../../domain/index.js";
+import { CategoryRepository } from "../../ports/index.js";
 
 export function createMockCategoryRepository(): jest.Mocked<CategoryRepository> {
   return {

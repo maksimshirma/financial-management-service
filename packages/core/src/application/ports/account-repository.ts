@@ -3,7 +3,7 @@ import {
   DuplicateEntryError,
   NewAccount,
   NotFoundError,
-} from "../../domain";
+} from "../../domain/index.js";
 
 export interface AccountRepository {
   findById(

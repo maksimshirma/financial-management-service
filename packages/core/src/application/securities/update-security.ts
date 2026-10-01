@@ -1,5 +1,5 @@
-import { NotFoundError, SecuritiesTable } from "../../domain";
-import { SecurityRepository } from "../ports";
+import { NotFoundError, SecuritiesTable } from "../../domain/index.js";
+import { SecurityRepository } from "../ports/index.js";
 
 export interface UpdateSecurityInput {
   securityId: SecuritiesTable["security_id"];

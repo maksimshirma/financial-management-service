@@ -1,6 +1,6 @@
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool, PoolConfig, types } from "pg";
-import { Database } from "./schema";
+import { Database } from "./schema.js";
 
 // pg returns NUMERIC (oid 1700) as a string by default to avoid precision
 // loss; every money/quantity column in the schema is NUMERIC but the core

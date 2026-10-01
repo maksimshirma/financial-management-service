@@ -6,8 +6,8 @@ import {
   TradeRepository,
   TradesTable,
 } from "@fms/core";
-import { Database } from "../schema";
-import { mapPgError } from "../errors";
+import { Database } from "../schema.js";
+import { mapPgError } from "../errors.js";
 
 export class KyselyTradeRepository implements TradeRepository {
   constructor(private readonly db: Kysely<Database>) {}

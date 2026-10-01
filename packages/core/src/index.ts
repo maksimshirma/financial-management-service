@@ -9,7 +9,7 @@ export type {
   SecuritiesTable,
   TradesTable,
   TransactionsTable,
-} from "./domain";
+} from "./domain/index.js";
 
 export {
   AccountType,
@@ -20,7 +20,7 @@ export {
   NotFoundError,
   SecurityType,
   TradeType,
-} from "./domain";
+} from "./domain/index.js";
 
-export type * from "./application/ports";
-export * from "./application";
+export type * from "./application/ports/index.js";
+export * from "./application/index.js";

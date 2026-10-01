@@ -1,5 +1,5 @@
-import { NewTrade, TradesTable, TradeType } from "../../domain";
-import { Clock, TradeRepository } from "../ports";
+import { NewTrade, TradesTable, TradeType } from "../../domain/index.js";
+import { Clock, TradeRepository } from "../ports/index.js";
 
 export interface BuySecurityInput {
   accountId: TradesTable["account_id"];
