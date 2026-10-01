@@ -1,5 +1,5 @@
 export { createKyselyInstance } from "./kysely";
-export { Database } from "./schema";
+export type { Database } from "./schema";
 export { KyselyAccountRepository } from "./repositories/kysely-account-repository";
 export { KyselyCategoryRepository } from "./repositories/kysely-category-repository";
 export { KyselySecurityRepository } from "./repositories/kysely-security-repository";

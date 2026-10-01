@@ -1,0 +1,23 @@
+{
+  "name": "@fms/mcp",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/main.ts",
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@fms/config": "workspace:*",
+    "@fms/core": "workspace:*",
+    "@fms/db": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "tsx": "^4.19.0"
+  }
+}

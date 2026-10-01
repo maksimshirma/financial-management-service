@@ -23,3 +23,4 @@ export {
 } from "./domain";
 
 export type * from "./application/ports";
+export * from "./application";
