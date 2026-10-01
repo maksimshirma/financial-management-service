@@ -188,7 +188,11 @@ importers:
         specifier: ^26.6.3
         version: 26.6.3
 
-  packages/core: {}
+  packages/core:
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
 
   packages/db:
     dependencies:
