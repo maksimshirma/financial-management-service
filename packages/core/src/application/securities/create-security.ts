@@ -1,7 +1,8 @@
-import { Currency, NewSecurity, SecurityType } from "../../domain/index.js";
+import { Currency, HouseholdSecuritiesTable, NewSecurity, SecurityType } from "../../domain/index.js";
 import { SecurityRepository } from "../ports/index.js";
 
 export interface CreateSecurityInput {
+  householdId: HouseholdSecuritiesTable["household_id"];
   ticker: string;
   isin?: string;
   name: string;
@@ -12,7 +13,11 @@ export interface CreateSecurityInput {
   maturityDate?: Date;
 }
 
-/** @throws {DuplicateEntryError} ticker or isin already taken */
+/**
+ * Hand-entered security, private to the household — for instruments that
+ * aren't on MOEX. Exchange securities come in through `importSecurity`.
+ * @throws {DuplicateEntryError} ticker or isin already taken by this household
+ */
 export async function createSecurity(
   deps: { securityRepo: SecurityRepository },
   input: CreateSecurityInput,
@@ -26,7 +31,9 @@ export async function createSecurity(
     face_value: input.faceValue,
     coupon_rate: input.couponRate,
     maturity_date: input.maturityDate,
-    is_archived: false,
+    owner_household_id: input.householdId,
   };
-  return deps.securityRepo.create(security);
+  const created = await deps.securityRepo.create(security);
+  await deps.securityRepo.link(input.householdId, created.security_id);
+  return created;
 }

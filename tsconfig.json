@@ -6,6 +6,7 @@
     { "path": "packages/db" },
     { "path": "packages/fixtures" },
     { "path": "packages/http" },
+    { "path": "packages/moex" },
     { "path": "packages/mcp" }
   ]
 }

@@ -43,6 +43,14 @@ module.exports = {
       moduleNameMapper: stripJsExtension,
     },
     {
+      displayName: "@fms/moex",
+      rootDir: "<rootDir>/packages/moex",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/__jest__/**/*.test.ts"],
+      transform: { "^.+\\.(t|j)s$": swcTransform },
+      moduleNameMapper: stripJsExtension,
+    },
+    {
       displayName: "@fms/db",
       rootDir: "<rootDir>/packages/db",
       testEnvironment: "node",

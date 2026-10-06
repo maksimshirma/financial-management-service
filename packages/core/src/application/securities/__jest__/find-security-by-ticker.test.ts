@@ -2,14 +2,14 @@ import { buildSecurity, createMockSecurityRepository } from "./mock-security-rep
 import { findSecurityByTicker } from "../find-security-by-ticker.js";
 
 describe("findSecurityByTicker", () => {
-  it("returns the security when found", async () => {
+  it("looks up among securities visible to the household", async () => {
     const securityRepo = createMockSecurityRepository();
     const security = buildSecurity();
     securityRepo.findByTicker.mockResolvedValue(security);
 
-    const result = await findSecurityByTicker({ securityRepo }, "SBER");
+    const result = await findSecurityByTicker({ securityRepo }, "h_demo", "SBER");
 
-    expect(securityRepo.findByTicker).toHaveBeenCalledWith("SBER");
+    expect(securityRepo.findByTicker).toHaveBeenCalledWith("h_demo", "SBER");
     expect(result).toBe(security);
   });
 
@@ -17,7 +17,7 @@ describe("findSecurityByTicker", () => {
     const securityRepo = createMockSecurityRepository();
     securityRepo.findByTicker.mockResolvedValue(null);
 
-    const result = await findSecurityByTicker({ securityRepo }, "NOPE");
+    const result = await findSecurityByTicker({ securityRepo }, "h_demo", "NOPE");
 
     expect(result).toBeNull();
   });

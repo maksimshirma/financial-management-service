@@ -10,14 +10,15 @@ export function registerFindSecurityByTickerTool(
     "find-security-by-ticker",
     {
       description:
-        "Look up a single security by its exact ticker symbol (e.g. 'SBER'). Returns 'Not found' if none is registered — use create-security to add it first.",
+        "Look up a single already-registered security by its exact ticker (for MOEX securities — the exchange code, e.g. 'SBER', 'SU26238RMFS4'). Returns 'Not found' if none is registered — then use search-securities and import-security.",
       annotations: { readOnlyHint: true },
       inputSchema: {
-        ticker: z.string().describe("The exact ticker symbol to search for."),
+        householdId: z.string().describe("The id of the household looking the security up."),
+        ticker: z.string().describe("The exact ticker to search for."),
       },
     },
-    async ({ ticker }) => {
-      const security = await findSecurityByTicker(deps, ticker);
+    async ({ householdId, ticker }) => {
+      const security = await findSecurityByTicker(deps, householdId, ticker);
       if (security === null) {
         return { content: [{ type: "text", text: "Not found" }] };
       }

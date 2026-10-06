@@ -3,6 +3,7 @@ import {
   AccountRepository,
   CategoryRepository,
   Clock,
+  MarketDataProvider,
   SecurityRepository,
   TradeRepository,
   TransactionRepository,
@@ -24,8 +25,11 @@ import { registerUpdateCategoryTool } from "./tools/categories/update-category.j
 import { registerArchiveSecurityTool } from "./tools/securities/archive-security.js";
 import { registerCreateSecurityTool } from "./tools/securities/create-security.js";
 import { registerFindSecurityByTickerTool } from "./tools/securities/find-security-by-ticker.js";
+import { registerGetBondScheduleTool } from "./tools/securities/get-bond-schedule.js";
+import { registerImportSecurityTool } from "./tools/securities/import-security.js";
 import { registerListArchivedSecuritiesTool } from "./tools/securities/list-archived-securities.js";
 import { registerListSecuritiesTool } from "./tools/securities/list-securities.js";
+import { registerSearchSecuritiesTool } from "./tools/securities/search-securities.js";
 import { registerUpdateSecurityTool } from "./tools/securities/update-security.js";
 
 import { registerDeleteTransactionTool } from "./tools/transactions/delete-transaction.js";
@@ -33,6 +37,10 @@ import { registerListTransactionsTool } from "./tools/transactions/list-transact
 import { registerRecordIncomeExpenseTool } from "./tools/transactions/record-income-expense.js";
 import { registerTransferBetweenAccountsTool } from "./tools/transactions/transfer-between-accounts.js";
 import { registerUpdateTransactionTool } from "./tools/transactions/update-transaction.js";
+
+import { registerGetSecurityQuoteTool } from "./tools/quotes/get-security-quote.js";
+
+import { registerGetPortfolioValueTool } from "./tools/portfolio/get-portfolio-value.js";
 
 import { registerBuySecurityTool } from "./tools/trades/buy-security.js";
 import { registerDeleteTradeTool } from "./tools/trades/delete-trade.js";
@@ -46,6 +54,7 @@ export interface ServerDeps {
   securityRepo: SecurityRepository;
   transactionRepo: TransactionRepository;
   tradeRepo: TradeRepository;
+  marketData: MarketDataProvider;
   clock: Clock;
 }
 
@@ -71,6 +80,9 @@ export function createServer(deps: ServerDeps): McpServer {
   registerListSecuritiesTool(server, deps);
   registerListArchivedSecuritiesTool(server, deps);
   registerFindSecurityByTickerTool(server, deps);
+  registerSearchSecuritiesTool(server, deps);
+  registerImportSecurityTool(server, deps);
+  registerGetBondScheduleTool(server, deps);
 
   registerRecordIncomeExpenseTool(server, deps);
   registerTransferBetweenAccountsTool(server, deps);
@@ -83,6 +95,9 @@ export function createServer(deps: ServerDeps): McpServer {
   registerUpdateTradeTool(server, deps);
   registerDeleteTradeTool(server, deps);
   registerListTradesTool(server, deps);
+
+  registerGetSecurityQuoteTool(server, deps);
+  registerGetPortfolioValueTool(server, deps);
 
   return server;
 }

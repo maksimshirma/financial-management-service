@@ -2,14 +2,14 @@ import { buildSecurity, createMockSecurityRepository } from "./mock-security-rep
 import { listSecurities } from "../list-securities.js";
 
 describe("listSecurities", () => {
-  it("delegates to securityRepo.listAll", async () => {
+  it("delegates to securityRepo.listByHousehold", async () => {
     const securityRepo = createMockSecurityRepository();
     const securities = [buildSecurity()];
-    securityRepo.listAll.mockResolvedValue(securities);
+    securityRepo.listByHousehold.mockResolvedValue(securities);
 
-    const result = await listSecurities({ securityRepo });
+    const result = await listSecurities({ securityRepo }, "h_demo");
 
-    expect(securityRepo.listAll).toHaveBeenCalled();
+    expect(securityRepo.listByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(securities);
   });
 });

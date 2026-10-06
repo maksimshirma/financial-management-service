@@ -6,7 +6,9 @@ import {
   listTrades,
   sellSecurity,
   updateTrade,
+  type AccountRepository,
   type Clock,
+  type SecurityRepository,
   type TradeRepository,
 } from "@fms/core";
 import { requireScope } from "../middleware/require-scope.js";
@@ -21,7 +23,12 @@ const tradeInputSchema = z.object({
   date: z.coerce.date().optional(),
 });
 
-export function createTradesRouter(deps: { tradeRepo: TradeRepository; clock: Clock }): Router {
+export function createTradesRouter(deps: {
+  tradeRepo: TradeRepository;
+  accountRepo: AccountRepository;
+  securityRepo: SecurityRepository;
+  clock: Clock;
+}): Router {
   const router = Router();
 
   router.post("/buy", requireScope("edit"), async (req, res) => {

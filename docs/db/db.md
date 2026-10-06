@@ -26,7 +26,7 @@ docker compose up -d
 | `02_users.sql`        | таблица `users`                                                                       |
 | `03_accounts.sql`     | таблица `accounts`                                                                    |
 | `04_categories.sql`   | таблица `categories`                                                                  |
-| `05_sequrities.sql`   | таблица `securities`                                                                  |
+| `05_sequrities.sql`   | таблицы `securities` и `household_securities`                                         |
 | `06_transactions.sql` | таблица `transactions`                                                                |
 | `07_trades.sql`       | таблица `trades`                                                                      |
 | `08_seed.sql`         | тестовые данные                                                                       |
@@ -50,6 +50,7 @@ erDiagram
     categories ||--o{ transactions : classifies
     securities ||--o{ transactions : "dividends/coupons"
     securities ||--o{ trades : traded
+    securities ||--o{ household_securities : "в списке"
 
     users {
         serial user_id PK
@@ -78,6 +79,16 @@ erDiagram
         decimal face_value
         decimal coupon_rate
         date maturity_date
+        text owner_household_id
+        varchar board_id
+        varchar market
+        timestamptz synced_at
+    }
+    household_securities {
+        text household_id PK
+        int security_id PK
+        bool is_archived
+        timestamptz added_at
     }
     transactions {
         serial transaction_id PK
@@ -109,3 +120,4 @@ erDiagram
 - **Одна таблица `transactions` для расходов/доходов и переводов**, различаются флагом `is_transfer` — см. constraint `chk_transfer_or_category` в [schema.md](./schema.md#transactions). Это позволяет строить единую ленту операций без UNION.
 - **Дивиденды и купоны** — обычные строки `transactions` с заполненным `security_id`, а не отдельная сущность. Категория (`Дивиденды`/`Купоны`) определяет тип дохода, `security_id` — источник.
 - **`trades` не трогает баланс счёта напрямую** — движение денег по сделке (списание/зачисление на брокерском счету) в текущей схеме не отражается отдельной транзакцией; баланс брокерского счёта в рублях/валюте и позиции по бумагам нужно считать агрегацией по `trades` + `transactions`, если это понадобится агенту.
+- **Общий справочник бумаг + список домохозяйства.** `securities` не принадлежит домохозяйству: биржевые бумаги (MOEX) хранятся в одном экземпляре и наполняются через `import-security`, а изоляцию даёт `household_securities` (что домохозяйство держит и что архивировало). Рыночные данные (цены, купоны) в БД не хранятся — их по запросу отдаёт `@fms/moex`. Решение — RFC «Использовать API для получения акций и т.п. или наполнять ими БД».

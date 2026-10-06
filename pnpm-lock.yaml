@@ -255,6 +255,9 @@ importers:
       '@fms/db':
         specifier: workspace:*
         version: link:../db
+      '@fms/moex':
+        specifier: workspace:*
+        version: link:../moex
       express:
         specifier: ^5.2.1
         version: 5.2.1(supports-color@8.1.1)
@@ -286,6 +289,9 @@ importers:
       '@fms/db':
         specifier: workspace:*
         version: link:../db
+      '@fms/moex':
+        specifier: workspace:*
+        version: link:../moex
       '@modelcontextprotocol/sdk':
         specifier: ^1.31.0
         version: 1.31.0(supports-color@8.1.1)(zod@3.25.76)
@@ -305,6 +311,16 @@ importers:
       tsx:
         specifier: ^4.19.0
         version: 4.23.15
+
+  packages/moex:
+    dependencies:
+      '@fms/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.3
+        version: 26.6.3
 
 packages:
 

@@ -10,14 +10,15 @@ export function registerArchiveSecurityTool(
     "archive-security",
     {
       description:
-        "Archive a security, hiding it from the active list while preserving trade/dividend history. There is no hard-delete for securities.",
+        "Hide a security from the household's active list while preserving trade/dividend history. Affects only this household. Importing or trading the security again brings it back.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household archiving the security."),
         securityId: z.number().describe("The id of the security to archive."),
       },
     },
-    async ({ securityId }) => {
-      await archiveSecurity(deps, securityId);
+    async ({ householdId, securityId }) => {
+      await archiveSecurity(deps, householdId, securityId);
       return { content: [{ type: "text", text: "OK" }] };
     },
   );

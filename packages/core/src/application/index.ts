@@ -11,11 +11,18 @@ export * from "./categories/list-archived-categories.js";
 export * from "./categories/list-categories.js";
 export * from "./categories/update-category.js";
 
+export * from "./portfolio/get-portfolio-value.js";
+
+export * from "./quotes/get-security-quote.js";
+
 export * from "./securities/archive-security.js";
 export * from "./securities/create-security.js";
 export * from "./securities/find-security-by-ticker.js";
+export * from "./securities/get-bond-schedule.js";
+export * from "./securities/import-security.js";
 export * from "./securities/list-archived-securities.js";
 export * from "./securities/list-securities.js";
+export * from "./securities/search-securities.js";
 export * from "./securities/update-security.js";
 
 export * from "./transactions/delete-transaction.js";

@@ -4,6 +4,7 @@ import {
   type AccountRepository,
   type CategoryRepository,
   type Clock,
+  type MarketDataProvider,
   type SecurityRepository,
   type TradeRepository,
   type TransactionRepository,
@@ -13,6 +14,7 @@ import { authenticate } from "./middleware/authenticate.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { createAccountsRouter } from "./routes/accounts.js";
 import { createCategoriesRouter } from "./routes/categories.js";
+import { createPortfolioRouter } from "./routes/portfolio.js";
 import { createSecuritiesRouter } from "./routes/securities.js";
 import { createTradesRouter } from "./routes/trades.js";
 import { createTransactionsRouter } from "./routes/transactions.js";
@@ -23,6 +25,7 @@ export interface ServerDeps {
   securityRepo: SecurityRepository;
   transactionRepo: TransactionRepository;
   tradeRepo: TradeRepository;
+  marketData: MarketDataProvider;
   clock: Clock;
 }
 
@@ -46,6 +49,7 @@ export function createServer(deps: ServerDeps, options: CreateServerOptions): Ex
   app.use("/securities", createSecuritiesRouter(deps));
   app.use("/transactions", createTransactionsRouter(deps));
   app.use("/trades", createTradesRouter(deps));
+  app.use("/portfolio", createPortfolioRouter(deps));
 
   app.use((_req, res) => {
     res.status(404).json({ error: "not_found" });

@@ -4,15 +4,16 @@
 
 ## Архитектура
 
-Монорепозиторий, pnpm workspaces, 5 пакетов в `packages/`:
+Монорепозиторий, pnpm workspaces, 6 пакетов в `packages/`:
 
 - **`@fms/core`** — доменная модель и use-case'ы (счета, категории, бумаги, транзакции, сделки). Чистый TypeScript, без зависимости от БД.
 - **`@fms/db`** — реализация репозиториев `@fms/core` на Kysely + Postgres, миграции.
+- **`@fms/moex`** — данные Мосбиржи (MOEX ISS): поиск бумаг, справочные данные, котировки, график купонов. Реализует порт `MarketDataProvider` из `@fms/core`.
 - **`@fms/config`** — чтение `.env` в одном месте для всех адаптеров.
 - **`@fms/fixtures`** — жизненный цикл тестовой БД (`finances_test`) для интеграционных тестов.
-- **`@fms/mcp`** — MCP-сервер: 27 tool'ов, по одному на каждый use-case `@fms/core`.
+- **`@fms/mcp`** — MCP-сервер: 32 tool'а, по одному на каждый use-case `@fms/core`.
 
-Правило графа зависимостей: `core` ← ничего, `db` ← `core`, `mcp`/`http` ← `core` + `db`. Подробности — в [`CLAUDE.md`](CLAUDE.md).
+Правило графа зависимостей: `core` ← ничего, `db` ← `core`, `moex` ← `core`, `mcp`/`http` ← `core` + `db` + `moex`. Подробности — в [`CLAUDE.md`](CLAUDE.md).
 
 ## Документация
 

@@ -15,6 +15,7 @@
     "@fms/config": "workspace:*",
     "@fms/core": "workspace:*",
     "@fms/db": "workspace:*",
+    "@fms/moex": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.31.0",
     "express": "^5.2.1",
     "zod": "^3.25.0"

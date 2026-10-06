@@ -1,6 +1,13 @@
-import { NewTrade, NotFoundError, TradesTable } from "../../domain/index.js";
+import {
+  AccountsTable,
+  NewTrade,
+  NotFoundError,
+  TradesTable,
+} from "../../domain/index.js";
 
 export interface TradeFilter {
+  /** trades on any account of this household */
+  householdId?: AccountsTable["household_id"];
   accountId?: TradesTable["account_id"];
   securityId?: TradesTable["security_id"];
   from?: Date;

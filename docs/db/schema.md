@@ -44,19 +44,45 @@
 
 ## `securities`
 
-Справочник финансовых инструментов (акции, облигации, фонды) для брокерских операций.
+Общий справочник финансовых инструментов (акции, облигации, фонды) для брокерских операций. Не принадлежит домохозяйству: одна строка на бумагу для всех.
+
+- **Биржевые** (`owner_household_id IS NULL`) — заводятся только через `import-security`, реквизиты берутся из MOEX ISS (`@fms/moex`), руками не редактируются.
+- **Приватные** (`owner_household_id` = hid) — ручной ввод через `create-security` для бумаг вне Мосбиржи, видны только владельцу.
 
 | Колонка | Тип | Описание |
 |---|---|---|
 | `security_id` | SERIAL PK | |
-| `ticker` | VARCHAR NOT NULL UNIQUE | |
-| `isin` | CHAR(12) UNIQUE | опционально |
+| `ticker` | VARCHAR NOT NULL | для биржевых — MOEX SECID (`SBER`, `SU26238RMFS4`) |
+| `isin` | CHAR(12) | опционально |
 | `name` | VARCHAR NOT NULL | |
 | `type` | `security_type` NOT NULL | stock/bond/fund |
 | `currency` | `currency` NOT NULL DEFAULT `RUB` | |
 | `face_value` | DECIMAL(14,2) | номинал облигации, NULL для акций/фондов |
 | `coupon_rate` | DECIMAL(6,3) | % годовых, только для облигаций |
 | `maturity_date` | DATE | дата погашения, только для облигаций |
+| `owner_household_id` | TEXT | NULL — биржевая бумага, иначе домохозяйство-владелец |
+| `board_id` | VARCHAR | режим торгов MOEX (`TQBR`, `TQOB`), нужен для котировок |
+| `market` | VARCHAR | рынок MOEX (`shares`, `bonds`) |
+| `synced_at` | TIMESTAMPTZ | последняя сверка реквизитов с ISS |
+
+Уникальность — частичными индексами, отдельно для биржевых и для приватных бумаг:
+
+- `uq_securities_ticker_exchange (ticker) WHERE owner_household_id IS NULL`;
+- `uq_securities_ticker_private (owner_household_id, ticker) WHERE owner_household_id IS NOT NULL`;
+- то же для `isin` (`uq_securities_isin_exchange`, `uq_securities_isin_private`).
+
+## `household_securities`
+
+Список бумаг домохозяйства: что оно импортировало, создало или торговало. Через него строятся `list-securities` / `list-archived-securities`, на нём же архивирование — справочник при этом не трогается и у других домохозяйств ничего не меняется.
+
+| Колонка | Тип | Описание |
+|---|---|---|
+| `household_id` | TEXT NOT NULL | PK (вместе с `security_id`) |
+| `security_id` | INT NOT NULL FK → `securities` | |
+| `is_archived` | BOOLEAN NOT NULL DEFAULT false | скрыть из активных без удаления истории |
+| `added_at` | TIMESTAMPTZ NOT NULL DEFAULT now() | |
+
+Строка появляется при `import-security`, `create-security` и при первой сделке с бумагой; повторное добавление снимает архив.
 
 ## `transactions`
 

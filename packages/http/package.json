@@ -15,6 +15,7 @@
     "@fms/config": "workspace:*",
     "@fms/core": "workspace:*",
     "@fms/db": "workspace:*",
+    "@fms/moex": "workspace:*",
     "express": "^5.2.1",
     "jose": "^6.2.12",
     "zod": "^3.25.0"

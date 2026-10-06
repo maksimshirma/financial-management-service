@@ -1,6 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
-import { DuplicateEntryError, InvalidTransactionError, NotFoundError } from "@fms/core";
+import {
+  DuplicateEntryError,
+  ForbiddenError,
+  InvalidTransactionError,
+  NotFoundError,
+} from "@fms/core";
 import { TokenInvalidError } from "../auth/verify-token.js";
 
 export function errorHandler(error: unknown, _req: Request, res: Response, _next: NextFunction) {
@@ -14,6 +19,10 @@ export function errorHandler(error: unknown, _req: Request, res: Response, _next
   }
   if (error instanceof DuplicateEntryError) {
     res.status(409).json({ error: "conflict", message: error.message });
+    return;
+  }
+  if (error instanceof ForbiddenError) {
+    res.status(403).json({ error: "forbidden", message: error.message });
     return;
   }
   if (error instanceof InvalidTransactionError) {

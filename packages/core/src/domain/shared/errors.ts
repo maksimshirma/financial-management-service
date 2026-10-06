@@ -18,3 +18,10 @@ export class InvalidTransactionError extends Error {
     this.name = "InvalidTransactionError";
   }
 }
+
+export class ForbiddenError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ForbiddenError";
+  }
+}
