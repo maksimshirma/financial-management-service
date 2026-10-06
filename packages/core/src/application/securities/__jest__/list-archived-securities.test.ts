@@ -2,14 +2,14 @@ import { buildSecurity, createMockSecurityRepository } from "./mock-security-rep
 import { listArchivedSecurities } from "../list-archived-securities.js";
 
 describe("listArchivedSecurities", () => {
-  it("delegates to securityRepo.listArchived", async () => {
+  it("delegates to securityRepo.listArchivedByHousehold", async () => {
     const securityRepo = createMockSecurityRepository();
-    const securities = [buildSecurity({ is_archived: true })];
-    securityRepo.listArchived.mockResolvedValue(securities);
+    const securities = [buildSecurity()];
+    securityRepo.listArchivedByHousehold.mockResolvedValue(securities);
 
-    const result = await listArchivedSecurities({ securityRepo });
+    const result = await listArchivedSecurities({ securityRepo }, "h_demo");
 
-    expect(securityRepo.listArchived).toHaveBeenCalled();
+    expect(securityRepo.listArchivedByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(securities);
   });
 });

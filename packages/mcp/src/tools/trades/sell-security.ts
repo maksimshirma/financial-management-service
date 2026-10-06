@@ -1,10 +1,21 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Clock, sellSecurity, TradeRepository } from "@fms/core";
+import {
+  AccountRepository,
+  Clock,
+  sellSecurity,
+  SecurityRepository,
+  TradeRepository,
+} from "@fms/core";
 
 export function registerSellSecurityTool(
   server: McpServer,
-  deps: { tradeRepo: TradeRepository; clock: Clock },
+  deps: {
+    tradeRepo: TradeRepository;
+    accountRepo: AccountRepository;
+    securityRepo: SecurityRepository;
+    clock: Clock;
+  },
 ) {
   server.registerTool(
     "sell-security",
@@ -16,7 +27,7 @@ export function registerSellSecurityTool(
         accountId: z.number().describe("The brokerage account the security was sold from."),
         securityId: z
           .number()
-          .describe("The security being sold (from list-securities or find-security-by-ticker)."),
+          .describe("The security being sold (from list-securities, find-security-by-ticker or import-security)."),
         quantity: z.number().describe("Number of units/shares sold."),
         price: z.number().describe("Price received per unit, in the security's currency."),
         accruedInterest: z

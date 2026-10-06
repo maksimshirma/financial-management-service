@@ -10,10 +10,11 @@ export function registerCreateSecurityTool(
     "create-security",
     {
       description:
-        "Add a new security (stock, bond, or fund) to the reference list so it can be bought, sold, or referenced by dividend/coupon transactions. Bond-only fields (faceValue, couponRate, maturityDate) are ignored for stocks and funds.",
+        "Add a security by hand, private to the household — ONLY for instruments not traded on the Moscow Exchange. For MOEX securities use search-securities and import-security instead: they bring exact reference data and enable quotes. Bond-only fields (faceValue, couponRate, maturityDate) are ignored for stocks and funds.",
       annotations: { readOnlyHint: false },
       inputSchema: {
-        ticker: z.string().describe("Exchange ticker symbol, e.g. 'SBER', 'AAPL'. Must be unique."),
+        householdId: z.string().describe("The id of the household that will own the security."),
+        ticker: z.string().describe("Ticker symbol, e.g. 'AAPL'. Unique within the household."),
         isin: z
           .string()
           .optional()

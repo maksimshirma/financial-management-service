@@ -14,8 +14,10 @@ export * from "./categories/update-category.js";
 export * from "./securities/archive-security.js";
 export * from "./securities/create-security.js";
 export * from "./securities/find-security-by-ticker.js";
+export * from "./securities/import-security.js";
 export * from "./securities/list-archived-securities.js";
 export * from "./securities/list-securities.js";
+export * from "./securities/search-securities.js";
 export * from "./securities/update-security.js";
 
 export * from "./transactions/delete-transaction.js";

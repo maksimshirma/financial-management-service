@@ -1,10 +1,15 @@
-import { SecuritiesTable } from "../../domain/index.js";
+import { HouseholdSecuritiesTable } from "../../domain/index.js";
 import { SecurityRepository } from "../ports/index.js";
 
-/** @throws {NotFoundError} security does not exist */
+/**
+ * Hides the security from the household's list; other households and the
+ * reference data are unaffected.
+ * @throws {NotFoundError} security is not in the household's list
+ */
 export async function archiveSecurity(
   deps: { securityRepo: SecurityRepository },
-  securityId: SecuritiesTable["security_id"],
+  householdId: HouseholdSecuritiesTable["household_id"],
+  securityId: HouseholdSecuritiesTable["security_id"],
 ) {
-  await deps.securityRepo.archive(securityId);
+  await deps.securityRepo.archiveLink(householdId, securityId);
 }

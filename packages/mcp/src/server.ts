@@ -3,6 +3,7 @@ import {
   AccountRepository,
   CategoryRepository,
   Clock,
+  MarketDataProvider,
   SecurityRepository,
   TradeRepository,
   TransactionRepository,
@@ -24,8 +25,10 @@ import { registerUpdateCategoryTool } from "./tools/categories/update-category.j
 import { registerArchiveSecurityTool } from "./tools/securities/archive-security.js";
 import { registerCreateSecurityTool } from "./tools/securities/create-security.js";
 import { registerFindSecurityByTickerTool } from "./tools/securities/find-security-by-ticker.js";
+import { registerImportSecurityTool } from "./tools/securities/import-security.js";
 import { registerListArchivedSecuritiesTool } from "./tools/securities/list-archived-securities.js";
 import { registerListSecuritiesTool } from "./tools/securities/list-securities.js";
+import { registerSearchSecuritiesTool } from "./tools/securities/search-securities.js";
 import { registerUpdateSecurityTool } from "./tools/securities/update-security.js";
 
 import { registerDeleteTransactionTool } from "./tools/transactions/delete-transaction.js";
@@ -46,6 +49,7 @@ export interface ServerDeps {
   securityRepo: SecurityRepository;
   transactionRepo: TransactionRepository;
   tradeRepo: TradeRepository;
+  marketData: MarketDataProvider;
   clock: Clock;
 }
 
@@ -71,6 +75,8 @@ export function createServer(deps: ServerDeps): McpServer {
   registerListSecuritiesTool(server, deps);
   registerListArchivedSecuritiesTool(server, deps);
   registerFindSecurityByTickerTool(server, deps);
+  registerSearchSecuritiesTool(server, deps);
+  registerImportSecurityTool(server, deps);
 
   registerRecordIncomeExpenseTool(server, deps);
   registerTransferBetweenAccountsTool(server, deps);

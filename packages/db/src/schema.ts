@@ -36,7 +36,17 @@ export interface SecurityRow {
   face_value: Numeric | null;
   coupon_rate: Numeric | null;
   maturity_date: Date | null;
-  is_archived: boolean;
+  owner_household_id: string | null;
+  board_id: string | null;
+  market: string | null;
+  synced_at: Date | null;
+}
+
+export interface HouseholdSecurityRow {
+  household_id: string;
+  security_id: number;
+  is_archived: Generated<boolean>;
+  added_at: Generated<Date>;
 }
 
 export interface TransactionRow {
@@ -68,6 +78,7 @@ export interface Database {
   accounts: AccountRow;
   categories: CategoryRow;
   securities: SecurityRow;
+  household_securities: HouseholdSecurityRow;
   transactions: TransactionRow;
   trades: TradeRow;
 }

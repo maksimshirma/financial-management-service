@@ -9,6 +9,7 @@ import {
   KyselyTradeRepository,
   KyselyTransactionRepository,
 } from "@fms/db";
+import { MoexMarketDataProvider } from "@fms/moex";
 import { startHttpServer } from "./http-transport.js";
 import { createServer, type ServerDeps } from "./server.js";
 
@@ -29,6 +30,7 @@ async function main() {
     securityRepo: new KyselySecurityRepository(db),
     transactionRepo: new KyselyTransactionRepository(db),
     tradeRepo: new KyselyTradeRepository(db),
+    marketData: new MoexMarketDataProvider(),
     clock,
   };
 

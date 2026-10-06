@@ -20,10 +20,15 @@ INSERT INTO categories (household_id, name, type) VALUES
     ('h_demo', 'Здоровье',    'expense');
 
 -- ===== Бумаги =====
-INSERT INTO securities (ticker, isin, name, type, currency, face_value, coupon_rate, maturity_date) VALUES
-    ('SBER', 'RU0009029540', 'Сбербанк',           'stock', 'RUB', NULL,   NULL,  NULL),
-    ('LQDT', 'RU000A101X76', 'Ликвидность (фонд)', 'fund',  'RUB', NULL,   NULL,  NULL),
-    ('SU26238', 'RU000A1038V6', 'ОФЗ 26238',        'bond',  'RUB', 1000.00, 7.100, '2041-05-15');
+INSERT INTO securities (ticker, isin, name, type, currency, face_value, coupon_rate, maturity_date, board_id, market) VALUES
+    ('SBER',         'RU0009029540', 'Сбербанк',  'stock', 'RUB', NULL,    NULL,  NULL,         'TQBR', 'shares'),
+    ('LQDT',         'RU000A1014L8', 'LQDT ETF',  'fund',  'RUB', NULL,    NULL,  NULL,         'TQBR', 'shares'),
+    ('SU26238RMFS4', 'RU000A1038V6', 'ОФЗ 26238', 'bond',  'RUB', 1000.00, 7.100, '2041-05-15', 'TQOB', 'bonds');
+
+INSERT INTO household_securities (household_id, security_id) VALUES
+    ('h_demo', 1),
+    ('h_demo', 2),
+    ('h_demo', 3);
 
 -- ===== Транзакции: доходы и расходы =====
 INSERT INTO transactions (date, account_id, amount, category_id, is_transfer, note) VALUES

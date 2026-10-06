@@ -1,6 +1,10 @@
 import { TradeType } from "../../../domain/index.js";
 import { buySecurity } from "../buy-security.js";
-import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.js";
+import {
+  buildTrade,
+  createMockTradeRepository,
+  createTradeLookupRepos,
+} from "./mock-trade-repository.js";
 
 describe("buySecurity", () => {
   it("creates a BUY trade with accruedInterest/fee defaulted to 0", async () => {
@@ -11,7 +15,7 @@ describe("buySecurity", () => {
     const date = new Date("2026-02-01");
 
     const result = await buySecurity(
-      { tradeRepo, clock },
+      { tradeRepo, ...createTradeLookupRepos(), clock },
       { accountId: 1, securityId: 2, quantity: 10, price: 50, date },
     );
 
@@ -34,7 +38,7 @@ describe("buySecurity", () => {
     const clock = { now: jest.fn() };
 
     await buySecurity(
-      { tradeRepo, clock },
+      { tradeRepo, ...createTradeLookupRepos(), clock },
       { accountId: 1, securityId: 2, quantity: 10, price: 50, accruedInterest: 5, fee: 1.5 },
     );
 
@@ -49,7 +53,7 @@ describe("buySecurity", () => {
     const now = new Date("2026-08-01");
     const clock = { now: jest.fn(() => now) };
 
-    await buySecurity({ tradeRepo, clock }, { accountId: 1, securityId: 2, quantity: 1, price: 1 });
+    await buySecurity({ tradeRepo, ...createTradeLookupRepos(), clock }, { accountId: 1, securityId: 2, quantity: 1, price: 1 });
 
     expect(tradeRepo.create).toHaveBeenCalledWith(expect.objectContaining({ date: now }));
   });

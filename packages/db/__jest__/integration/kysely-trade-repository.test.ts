@@ -9,10 +9,10 @@ const repo = new KyselyTradeRepository(db);
 beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
-async function seedAccount() {
+async function seedAccount(householdId = "h_demo", name = "Broker") {
   const account = await db
     .insertInto("accounts")
-    .values({ household_id: "h_demo", name: "Broker", type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
+    .values({ household_id: householdId, name, type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
     .returningAll()
     .executeTakeFirstOrThrow();
   return account.account_id;
@@ -21,7 +21,7 @@ async function seedAccount() {
 async function seedSecurity(ticker = "SBER") {
   const security = await db
     .insertInto("securities")
-    .values({ ticker, name: "Sberbank", type: SecurityType.STOCK, currency: Currency.RUB, is_archived: false })
+    .values({ ticker, name: "Sberbank", type: SecurityType.STOCK, currency: Currency.RUB })
     .returningAll()
     .executeTakeFirstOrThrow();
   return security.security_id;
@@ -114,4 +114,28 @@ test("delete removes the row, missing id throws NotFoundError", async () => {
   await repo.delete(trade.trade_id);
   await expect(repo.findById(trade.trade_id)).resolves.toBeNull();
   await expect(repo.delete(trade.trade_id)).rejects.toBeInstanceOf(NotFoundError);
+});
+
+test("find by householdId returns trades on any of the household's accounts only", async () => {
+  const mineA = await seedAccount("h_a", "Broker A1");
+  const mineB = await seedAccount("h_a", "Broker A2");
+  const theirs = await seedAccount("h_b", "Broker B");
+  const securityId = await seedSecurity();
+  const trade = (account_id: number) => ({
+    date: new Date("2026-09-16"),
+    account_id,
+    security_id: securityId,
+    type: TradeType.BUY,
+    quantity: 1,
+    price: 1,
+    accrued_interest: 0,
+    fee: 0,
+  });
+  await repo.create(trade(mineA));
+  await repo.create(trade(mineB));
+  await repo.create(trade(theirs));
+
+  const found = await repo.find({ householdId: "h_a" });
+
+  expect(found.map((t) => t.account_id).sort()).toEqual([mineA, mineB].sort());
 });

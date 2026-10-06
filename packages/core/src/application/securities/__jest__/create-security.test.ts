@@ -3,27 +3,34 @@ import { createSecurity } from "../create-security.js";
 import { buildSecurity, createMockSecurityRepository } from "./mock-security-repository.js";
 
 describe("createSecurity", () => {
-  it("builds a new security with is_archived defaulted to false", async () => {
+  it("creates a security private to the household and adds it to the household's list", async () => {
     const securityRepo = createMockSecurityRepository();
-    const created = buildSecurity();
+    const created = buildSecurity({ security_id: 7, owner_household_id: "h_demo" });
     securityRepo.create.mockResolvedValue(created);
 
     const result = await createSecurity(
       { securityRepo },
-      { ticker: "SBER", name: "Sberbank", type: SecurityType.STOCK, currency: Currency.RUB },
+      {
+        householdId: "h_demo",
+        ticker: "AAPL",
+        name: "Apple",
+        type: SecurityType.STOCK,
+        currency: Currency.USD,
+      },
     );
 
     expect(securityRepo.create).toHaveBeenCalledWith({
-      ticker: "SBER",
+      ticker: "AAPL",
       isin: undefined,
-      name: "Sberbank",
+      name: "Apple",
       type: SecurityType.STOCK,
-      currency: Currency.RUB,
+      currency: Currency.USD,
       face_value: undefined,
       coupon_rate: undefined,
       maturity_date: undefined,
-      is_archived: false,
+      owner_household_id: "h_demo",
     });
+    expect(securityRepo.link).toHaveBeenCalledWith("h_demo", 7);
     expect(result).toBe(created);
   });
 
@@ -35,11 +42,12 @@ describe("createSecurity", () => {
     await createSecurity(
       { securityRepo },
       {
-        ticker: "SU26238",
-        isin: "RU000A1038V6",
-        name: "OFZ 26238",
+        householdId: "h_demo",
+        ticker: "XS123",
+        isin: "XS0000000001",
+        name: "Eurobond",
         type: SecurityType.BOND,
-        currency: Currency.RUB,
+        currency: Currency.USD,
         faceValue: 1000,
         couponRate: 7.1,
         maturityDate,
@@ -48,7 +56,7 @@ describe("createSecurity", () => {
 
     expect(securityRepo.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        isin: "RU000A1038V6",
+        isin: "XS0000000001",
         face_value: 1000,
         coupon_rate: 7.1,
         maturity_date: maturityDate,
