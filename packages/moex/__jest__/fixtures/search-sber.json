@@ -1,0 +1,26 @@
+{
+"securities": {
+	"columns": ["secid", "shortname", "isin", "type", "primary_boardid"], 
+	"data": [
+		["FIXSBER", "Фиксинг МосБиржи SBER", null, "stock_index_pf", "INPF"],
+		["FIXSBERP", "Фиксинг МосБиржи SBERP", null, "stock_index_pf", "INPF"],
+		["SBER", "Сбербанк", "RU0009029540", "common_share", "TQBR"],
+		["SBERP", "Сбербанк-п", "RU0009029557", "preferred_share", "TQBR"],
+		["RU000A10DS74", "Сбер Sb51R", "RU000A10DS74", "exchange_bond", "TQCB"],
+		["RU000A10EF52", "Сбер Sb52R", "RU000A10EF52", "exchange_bond", "TQCB"],
+		["RU000A10F7R7", "Сбер Sb56R", "RU000A10F7R7", "exchange_bond", "TQCB"],
+		["RU000A10DCH3", "СберSbD10R", "RU000A10DCH3", "exchange_bond", "TQCB"],
+		["RU000A10C8S6", "Сбер SbD8R", "RU000A10C8S6", "exchange_bond", "TQCB"],
+		["RU000A10B0E4", "Сбер SbD5R", "RU000A10B0E4", "exchange_bond", "TQCB"],
+		["RU000A10CBA2", "Сбер SbD9R", "RU000A10CBA2", "exchange_bond", "TQCB"],
+		["RU000A10BZH8", "Сбер SbD7R", "RU000A10BZH8", "exchange_bond", "TQCB"],
+		["RU000A10AS85", "Сбер SbD4R", "RU000A10AS85", "exchange_bond", "TQCB"],
+		["RU000A109X37", "Сбер SbD3R", "RU000A109X37", "exchange_bond", "TQCB"],
+		["RU000A109LG9", "Сбер SbD2R", "RU000A109LG9", "exchange_bond", "TQCB"],
+		["RU000A10BL99", "Сбер SbD6R", "RU000A10BL99", "exchange_bond", "TQCB"],
+		["RU000A10FZ57", "СберИОС819", "RU000A10FZ57", "exchange_bond", "TQCB"],
+		["RU000A10EZF6", "СбКИБ1P545", "RU000A10EZF6", "corporate_bond", "TQCB"],
+		["RU000A10FVL0", "СберИОС815", "RU000A10FVL0", "exchange_bond", "TQCB"],
+		["RU000A109HL7", "СбКИБ1P27", "RU000A109HL7", "corporate_bond", "TQCB"]
+	]
+}}

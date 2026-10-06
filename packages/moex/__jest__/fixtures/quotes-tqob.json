@@ -1,0 +1,13 @@
+{
+"securities": {
+	"columns": ["SECID", "PREVPRICE", "ACCRUEDINT"], 
+	"data": [
+		["SU26238RMFS4", 50.801, 24.51]
+	]
+},
+"marketdata": {
+	"columns": ["SECID", "LAST", "MARKETPRICE", "SYSTIME"], 
+	"data": [
+		["SU26238RMFS4", 50.551, 50.613, "2026-10-06 18:28:45"]
+	]
+}}

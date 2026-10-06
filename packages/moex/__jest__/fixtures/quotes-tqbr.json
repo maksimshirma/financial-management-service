@@ -1,0 +1,15 @@
+{
+"securities": {
+	"columns": ["SECID", "PREVPRICE"], 
+	"data": [
+		["LQDT", 2.1016],
+		["SBER", 281.77]
+	]
+},
+"marketdata": {
+	"columns": ["SECID", "LAST", "MARKETPRICE", "SYSTIME"], 
+	"data": [
+		["LQDT", 2.1024, 2.1017, "2026-10-06 18:28:45"],
+		["SBER", 282.69, 280.42, "2026-10-06 18:28:45"]
+	]
+}}
