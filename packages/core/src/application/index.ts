@@ -11,6 +11,10 @@ export * from "./categories/list-archived-categories.js";
 export * from "./categories/list-categories.js";
 export * from "./categories/update-category.js";
 
+export * from "./portfolio/get-portfolio-value.js";
+
+export * from "./quotes/get-security-quote.js";
+
 export * from "./securities/archive-security.js";
 export * from "./securities/create-security.js";
 export * from "./securities/find-security-by-ticker.js";

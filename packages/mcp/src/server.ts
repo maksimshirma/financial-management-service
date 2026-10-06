@@ -37,6 +37,10 @@ import { registerRecordIncomeExpenseTool } from "./tools/transactions/record-inc
 import { registerTransferBetweenAccountsTool } from "./tools/transactions/transfer-between-accounts.js";
 import { registerUpdateTransactionTool } from "./tools/transactions/update-transaction.js";
 
+import { registerGetSecurityQuoteTool } from "./tools/quotes/get-security-quote.js";
+
+import { registerGetPortfolioValueTool } from "./tools/portfolio/get-portfolio-value.js";
+
 import { registerBuySecurityTool } from "./tools/trades/buy-security.js";
 import { registerDeleteTradeTool } from "./tools/trades/delete-trade.js";
 import { registerListTradesTool } from "./tools/trades/list-trades.js";
@@ -89,6 +93,9 @@ export function createServer(deps: ServerDeps): McpServer {
   registerUpdateTradeTool(server, deps);
   registerDeleteTradeTool(server, deps);
   registerListTradesTool(server, deps);
+
+  registerGetSecurityQuoteTool(server, deps);
+  registerGetPortfolioValueTool(server, deps);
 
   return server;
 }
