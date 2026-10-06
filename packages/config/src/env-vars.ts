@@ -11,6 +11,7 @@ export const ENV_VARS = [
   "MCP_TRANSPORT",
   "MCP_API_KEY",
   "PORT",
+  "IDENTITY_SERVICE_URL",
 ] as const;
 
 export type EnvVarName = (typeof ENV_VARS)[number];

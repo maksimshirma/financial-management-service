@@ -82,6 +82,33 @@ services:
       postgres:
         condition: service_healthy
 
+  # REST API adapter — resource server, verifies internal-JWTs against
+  # identity-service's JWKS (no local auth model of its own). Gated behind
+  # its own profile, same reasoning as mcp-http:
+  #   docker compose --profile http up -d http
+  http:
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    image: fms-http:local
+    profiles: ["http"]
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      # host.docker.internal, not localhost — identity-service runs as its
+      # own separate compose project on the host, not inside this network.
+      IDENTITY_SERVICE_URL: ${IDENTITY_SERVICE_URL:-http://host.docker.internal:3000}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${HTTP_PORT:-3002}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pg-data:
     name: pg-data

@@ -5,6 +5,7 @@
     { "path": "packages/core" },
     { "path": "packages/db" },
     { "path": "packages/fixtures" },
+    { "path": "packages/http" },
     { "path": "packages/mcp" }
   ]
 }

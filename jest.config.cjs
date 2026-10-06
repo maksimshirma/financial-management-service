@@ -35,6 +35,14 @@ module.exports = {
       moduleNameMapper: stripJsExtension,
     },
     {
+      displayName: "@fms/http",
+      rootDir: "<rootDir>/packages/http",
+      testEnvironment: "node",
+      testMatch: ["<rootDir>/src/**/__jest__/**/*.test.ts"],
+      transform: { "^.+\\.(t|j)s$": swcTransform },
+      moduleNameMapper: stripJsExtension,
+    },
+    {
       displayName: "@fms/db",
       rootDir: "<rootDir>/packages/db",
       testEnvironment: "node",
