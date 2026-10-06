@@ -22,6 +22,7 @@ export {
   ForbiddenError,
   InvalidTransactionError,
   isExchangeSecurity,
+  MarketDataUnavailableError,
   NotFoundError,
   SecurityType,
   TradeType,

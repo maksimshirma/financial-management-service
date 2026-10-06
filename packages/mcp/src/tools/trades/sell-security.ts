@@ -24,6 +24,7 @@ export function registerSellSecurityTool(
         "Record the sale of a security on a brokerage account. The system does not check whether the account actually holds enough of the security to sell — that's the caller's responsibility.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household acting; only its own accounts, categories and securities can be used."),
         accountId: z.number().describe("The brokerage account the security was sold from."),
         securityId: z
           .number()

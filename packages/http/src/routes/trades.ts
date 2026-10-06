@@ -11,6 +11,7 @@ import {
   type SecurityRepository,
   type TradeRepository,
 } from "@fms/core";
+import { requireHousehold } from "../middleware/require-household.js";
 import { requireScope } from "../middleware/require-scope.js";
 
 const tradeInputSchema = z.object({
@@ -30,15 +31,16 @@ export function createTradesRouter(deps: {
   clock: Clock;
 }): Router {
   const router = Router();
+  router.use(requireHousehold);
 
   router.post("/buy", requireScope("edit"), async (req, res) => {
     const input = tradeInputSchema.parse(req.body);
-    res.status(201).json(await buySecurity(deps, input));
+    res.status(201).json(await buySecurity(deps, { householdId: req.auth.hid!, ...input }));
   });
 
   router.post("/sell", requireScope("edit"), async (req, res) => {
     const input = tradeInputSchema.parse(req.body);
-    res.status(201).json(await sellSecurity(deps, input));
+    res.status(201).json(await sellSecurity(deps, { householdId: req.auth.hid!, ...input }));
   });
 
   router.patch("/:tradeId", requireScope("edit"), async (req, res) => {
@@ -53,13 +55,13 @@ export function createTradesRouter(deps: {
       })
       .parse(req.body);
 
-    await updateTrade(deps, { tradeId, ...input });
+    await updateTrade(deps, { householdId: req.auth.hid!, tradeId, ...input });
     res.status(204).end();
   });
 
   router.delete("/:tradeId", requireScope("edit"), async (req, res) => {
     const tradeId = z.coerce.number().parse(req.params.tradeId);
-    await deleteTrade(deps, tradeId);
+    await deleteTrade(deps, req.auth.hid!, tradeId);
     res.status(204).end();
   });
 
@@ -73,7 +75,7 @@ export function createTradesRouter(deps: {
       })
       .parse(req.query);
 
-    res.json(await listTrades(deps, filter));
+    res.json(await listTrades(deps, req.auth.hid!, filter));
   });
 
   return router;

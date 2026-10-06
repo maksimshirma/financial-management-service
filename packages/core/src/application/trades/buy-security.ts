@@ -1,8 +1,9 @@
-import { NewTrade, TradesTable, TradeType } from "../../domain/index.js";
+import { AccountsTable, NewTrade, TradesTable, TradeType } from "../../domain/index.js";
 import { Clock } from "../ports/index.js";
 import { RecordTradeDeps, recordTrade } from "./record-trade.js";
 
 export interface BuySecurityInput {
+  householdId: AccountsTable["household_id"];
   accountId: TradesTable["account_id"];
   securityId: TradesTable["security_id"];
   quantity: number;
@@ -12,7 +13,7 @@ export interface BuySecurityInput {
   date?: Date;
 }
 
-/** @throws {NotFoundError} account does not exist, or security isn't visible to its household */
+/** @throws {NotFoundError} account isn't the household's, or security isn't visible to it */
 export async function buySecurity(
   deps: RecordTradeDeps & { clock: Clock },
   input: BuySecurityInput,
@@ -27,5 +28,5 @@ export async function buySecurity(
     accrued_interest: input.accruedInterest ?? 0,
     fee: input.fee ?? 0,
   };
-  return recordTrade(deps, trade);
+  return recordTrade(deps, input.householdId, trade);
 }

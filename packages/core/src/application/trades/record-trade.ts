@@ -1,5 +1,6 @@
-import { NewTrade, NotFoundError } from "../../domain/index.js";
+import { AccountsTable, NewTrade } from "../../domain/index.js";
 import { AccountRepository, SecurityRepository, TradeRepository } from "../ports/index.js";
+import { requireOwnAccount, requireVisibleSecurity } from "../households/household-access.js";
 
 export interface RecordTradeDeps {
   tradeRepo: TradeRepository;
@@ -8,18 +9,19 @@ export interface RecordTradeDeps {
 }
 
 /**
- * Shared by buy/sell: the security must be visible to the account's household,
- * and trading it puts it on that household's list.
- * @throws {NotFoundError} account does not exist, or security isn't visible to its household
+ * Shared by buy/sell: the account must be the household's own and the
+ * security visible to it; trading puts the security on the household's list.
+ * @throws {NotFoundError} account isn't the household's, or security isn't visible to it
  */
-export async function recordTrade(deps: RecordTradeDeps, trade: NewTrade) {
-  const account = await deps.accountRepo.findById(trade.account_id);
-  if (!account) throw new NotFoundError("Account", trade.account_id);
-
-  const security = await deps.securityRepo.findVisible(account.household_id, trade.security_id);
-  if (!security) throw new NotFoundError("Security", trade.security_id);
+export async function recordTrade(
+  deps: RecordTradeDeps,
+  householdId: AccountsTable["household_id"],
+  trade: NewTrade,
+) {
+  await requireOwnAccount(deps.accountRepo, householdId, trade.account_id);
+  await requireVisibleSecurity(deps.securityRepo, householdId, trade.security_id);
 
   const created = await deps.tradeRepo.create(trade);
-  await deps.securityRepo.link(account.household_id, trade.security_id);
+  await deps.securityRepo.link(householdId, trade.security_id);
   return created;
 }

@@ -1,48 +1,44 @@
 import { NotFoundError } from "../../../domain/index.js";
 import { recordTrade } from "../record-trade.js";
-import {
-  buildTrade,
-  createMockTradeRepository,
-  createTradeLookupRepos,
-} from "./mock-trade-repository.js";
+import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.js";
+import { createHouseholdRepos, FOREIGN, OWN } from "../../households/__jest__/household-fixtures.js";
+
+function setup() {
+  const tradeRepo = createMockTradeRepository();
+  tradeRepo.create.mockResolvedValue(buildTrade());
+  const { accountRepo, securityRepo } = createHouseholdRepos();
+  return { tradeRepo, accountRepo, securityRepo };
+}
 
 describe("recordTrade", () => {
-  const { trade_id: _, ...newTrade } = buildTrade({ account_id: 1, security_id: 2 });
+  const { trade_id: _, ...newTrade } = buildTrade({ account_id: OWN, security_id: 2 });
 
-  it("checks visibility against the account's household and links the security to it", async () => {
-    const tradeRepo = createMockTradeRepository();
-    const created = buildTrade();
-    tradeRepo.create.mockResolvedValue(created);
-    const { accountRepo, securityRepo } = createTradeLookupRepos();
+  it("checks the household's account and security, then links the security to it", async () => {
+    const deps = setup();
 
-    const result = await recordTrade({ tradeRepo, accountRepo, securityRepo }, newTrade);
+    await recordTrade(deps, "h_demo", newTrade);
 
-    expect(securityRepo.findVisible).toHaveBeenCalledWith("h_demo", 2);
-    expect(tradeRepo.create).toHaveBeenCalledWith(newTrade);
-    expect(securityRepo.link).toHaveBeenCalledWith("h_demo", 2);
-    expect(result).toBe(created);
+    expect(deps.securityRepo.findVisible).toHaveBeenCalledWith("h_demo", 2);
+    expect(deps.tradeRepo.create).toHaveBeenCalledWith(newTrade);
+    expect(deps.securityRepo.link).toHaveBeenCalledWith("h_demo", 2);
   });
 
-  it("throws NotFoundError when the account doesn't exist", async () => {
-    const tradeRepo = createMockTradeRepository();
-    const { accountRepo, securityRepo } = createTradeLookupRepos();
-    accountRepo.findById.mockResolvedValue(null);
+  it("refuses another household's account", async () => {
+    const deps = setup();
 
     await expect(
-      recordTrade({ tradeRepo, accountRepo, securityRepo }, newTrade),
+      recordTrade(deps, "h_demo", { ...newTrade, account_id: FOREIGN }),
     ).rejects.toBeInstanceOf(NotFoundError);
-    expect(tradeRepo.create).not.toHaveBeenCalled();
+    expect(deps.tradeRepo.create).not.toHaveBeenCalled();
+    expect(deps.securityRepo.link).not.toHaveBeenCalled();
   });
 
-  it("throws NotFoundError for another household's private security", async () => {
-    const tradeRepo = createMockTradeRepository();
-    const { accountRepo, securityRepo } = createTradeLookupRepos();
-    securityRepo.findVisible.mockResolvedValue(null);
+  it("refuses another household's private security", async () => {
+    const deps = setup();
 
     await expect(
-      recordTrade({ tradeRepo, accountRepo, securityRepo }, newTrade),
+      recordTrade(deps, "h_demo", { ...newTrade, security_id: FOREIGN }),
     ).rejects.toBeInstanceOf(NotFoundError);
-    expect(tradeRepo.create).not.toHaveBeenCalled();
-    expect(securityRepo.link).not.toHaveBeenCalled();
+    expect(deps.tradeRepo.create).not.toHaveBeenCalled();
   });
 });

@@ -1,10 +1,21 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { TransactionRepository, updateTransaction } from "@fms/core";
+import {
+  AccountRepository,
+  CategoryRepository,
+  SecurityRepository,
+  TransactionRepository,
+  updateTransaction,
+} from "@fms/core";
 
 export function registerUpdateTransactionTool(
   server: McpServer,
-  deps: { transactionRepo: TransactionRepository },
+  deps: {
+    transactionRepo: TransactionRepository;
+    accountRepo: AccountRepository;
+    categoryRepo: CategoryRepository;
+    securityRepo: SecurityRepository;
+  },
 ) {
   server.registerTool(
     "update-transaction",
@@ -13,6 +24,7 @@ export function registerUpdateTransactionTool(
         "Correct one or more fields on an existing transaction. Only the fields provided are changed.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household acting; only its own accounts, categories and securities can be used."),
         transactionId: z.number().describe("The id of the transaction to update."),
         date: z.coerce.date().optional().describe("New transaction date, replacing the current one."),
         amount: z.number().optional().describe("New amount, replacing the current one."),

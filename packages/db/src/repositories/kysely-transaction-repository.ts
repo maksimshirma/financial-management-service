@@ -57,6 +57,15 @@ export class KyselyTransactionRepository implements TransactionRepository {
   async find(filter: TransactionFilter): Promise<TransactionsTable[]> {
     let query = this.db.selectFrom("transactions").selectAll();
 
+    if (filter.householdId !== undefined) {
+      const householdId = filter.householdId;
+      query = query.where("account_id", "in", (qb) =>
+        qb
+          .selectFrom("accounts")
+          .select("account_id")
+          .where("household_id", "=", householdId),
+      );
+    }
     if (filter.accountId !== undefined) {
       query = query.where("account_id", "=", filter.accountId);
     }

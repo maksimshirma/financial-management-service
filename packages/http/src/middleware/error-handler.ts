@@ -4,6 +4,7 @@ import {
   DuplicateEntryError,
   ForbiddenError,
   InvalidTransactionError,
+  MarketDataUnavailableError,
   NotFoundError,
 } from "@fms/core";
 import { TokenInvalidError } from "../auth/verify-token.js";
@@ -27,6 +28,11 @@ export function errorHandler(error: unknown, _req: Request, res: Response, _next
   }
   if (error instanceof InvalidTransactionError) {
     res.status(400).json({ error: "invalid_transaction", message: error.message });
+    return;
+  }
+  if (error instanceof MarketDataUnavailableError) {
+    // the exchange is down or slow — retryable, not our bug
+    res.status(503).json({ error: "market_data_unavailable", message: error.message });
     return;
   }
   if (error instanceof TokenInvalidError) {

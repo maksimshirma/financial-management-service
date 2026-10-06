@@ -9,7 +9,6 @@ import {
   type TradeRepository,
   type TransactionRepository,
 } from "@fms/core";
-import { createJwks } from "./auth/verify-token.js";
 import { authenticate } from "./middleware/authenticate.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { createAccountsRouter } from "./routes/accounts.js";
@@ -30,19 +29,19 @@ export interface ServerDeps {
 }
 
 export interface CreateServerOptions {
-  identityServiceUrl: string;
+  /** identity-service's signing keys — see `createJwks` in ./auth/verify-token.ts */
+  jwks: JWTVerifyGetKey;
 }
 
 export function createServer(deps: ServerDeps, options: CreateServerOptions): Express {
   const app = express();
-  const jwks: JWTVerifyGetKey = createJwks(options.identityServiceUrl);
 
   app.get("/healthz", (_req, res) => {
     res.status(200).json({ status: "ok" });
   });
 
   app.use(express.json());
-  app.use(authenticate(jwks));
+  app.use(authenticate(options.jwks));
 
   app.use("/accounts", createAccountsRouter(deps));
   app.use("/categories", createCategoriesRouter(deps));

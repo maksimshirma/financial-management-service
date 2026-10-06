@@ -145,3 +145,21 @@ test("delete removes the row, missing id throws NotFoundError", async () => {
   await expect(repo.findById(transaction.transaction_id)).resolves.toBeNull();
   await expect(repo.delete(transaction.transaction_id)).rejects.toBeInstanceOf(NotFoundError);
 });
+
+test("find by householdId returns transactions on the household's accounts only", async () => {
+  const mine = await seedAccount("h_a", "Card A");
+  const mine2 = await seedAccount("h_a", "Cash A");
+  const theirs = await seedAccount("h_b", "Card B");
+  const categoryA = await seedCategory("h_a");
+  const categoryB = await seedCategory("h_b");
+  const expense = (account_id: number, category_id: number) =>
+    repo.create({ date: new Date("2026-09-06"), account_id, amount: 100, category_id, is_transfer: false });
+  await expense(mine, categoryA);
+  await expense(mine2, categoryA);
+  await expense(theirs, categoryB);
+
+  const found = await repo.find({ householdId: "h_a" });
+
+  expect(found.map((t) => t.account_id).sort()).toEqual([mine, mine2].sort());
+  await expect(repo.find({ householdId: "h_a", accountId: theirs })).resolves.toEqual([]);
+});

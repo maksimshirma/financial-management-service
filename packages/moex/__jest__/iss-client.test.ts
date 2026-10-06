@@ -1,3 +1,4 @@
+import { MarketDataUnavailableError } from "@fms/core";
 import { FetchFn, IssClient, IssError, parseBlock } from "../src/iss-client";
 import { jsonResponse } from "./fake-fetch";
 
@@ -28,7 +29,10 @@ test("retries network errors and gives up with IssError", async () => {
   const fetchFn = jest.fn<ReturnType<FetchFn>, Parameters<FetchFn>>().mockRejectedValue(new TypeError("fetch failed"));
   const client = new IssClient({ fetchFn, retries: 2, retryDelayMs: 0 });
 
-  await expect(client.get("/index")).rejects.toBeInstanceOf(IssError);
+  const error = await client.get("/index").catch((err: unknown) => err);
+  expect(error).toBeInstanceOf(IssError);
+  // adapters map the core error, without depending on @fms/moex
+  expect(error).toBeInstanceOf(MarketDataUnavailableError);
   expect(fetchFn).toHaveBeenCalledTimes(3);
 });
 
