@@ -2,14 +2,14 @@ import { buildAccount, createMockAccountRepository } from "./mock-account-reposi
 import { listAccounts } from "../list-accounts.js";
 
 describe("listAccounts", () => {
-  it("delegates to accountRepo.findAllByUser", async () => {
+  it("delegates to accountRepo.findAllByHousehold", async () => {
     const accountRepo = createMockAccountRepository();
     const accounts = [buildAccount()];
-    accountRepo.findAllByUser.mockResolvedValue(accounts);
+    accountRepo.findAllByHousehold.mockResolvedValue(accounts);
 
-    const result = await listAccounts({ accountRepo }, 1);
+    const result = await listAccounts({ accountRepo }, "h_demo");
 
-    expect(accountRepo.findAllByUser).toHaveBeenCalledWith(1);
+    expect(accountRepo.findAllByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(accounts);
   });
 });

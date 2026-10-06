@@ -8,7 +8,7 @@ export interface UpdateCategoryInput {
 
 /**
  * @throws {NotFoundError} category does not exist
- * @throws {DuplicateEntryError} name already taken
+ * @throws {DuplicateEntryError} (household_id, name) already taken
  */
 export async function updateCategory(
   deps: { categoryRepo: CategoryRepository },

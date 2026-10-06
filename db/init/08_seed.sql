@@ -1,23 +1,23 @@
 -- ===== Счета =====
-INSERT INTO accounts (user_id, name, type, currency) VALUES
-    (1, 'Наличные',            'cash',    'RUB'),
-    (1, 'Дебетовая карта',     'card',    'RUB'),
-    (1, 'Вклад в банке',       'deposit', 'RUB'),
-    (1, 'Кредитка',            'credit',  'RUB'),
-    (1, 'Брокерский счёт',     'broker',  'RUB'),
-    (1, 'Валютная карта',      'card',    'USD');
+INSERT INTO accounts (household_id, name, type, currency) VALUES
+    ('h_demo', 'Наличные',            'cash',    'RUB'),
+    ('h_demo', 'Дебетовая карта',     'card',    'RUB'),
+    ('h_demo', 'Вклад в банке',       'deposit', 'RUB'),
+    ('h_demo', 'Кредитка',            'credit',  'RUB'),
+    ('h_demo', 'Брокерский счёт',     'broker',  'RUB'),
+    ('h_demo', 'Валютная карта',      'card',    'USD');
 
 -- ===== Категории =====
-INSERT INTO categories (name, type) VALUES
-    ('Зарплата',    'income'),
-    ('Фриланс',     'income'),
-    ('Дивиденды',   'income'),
-    ('Купоны',      'income'),
-    ('Еда',         'expense'),
-    ('Транспорт',   'expense'),
-    ('Жильё',       'expense'),
-    ('Развлечения', 'expense'),
-    ('Здоровье',    'expense');
+INSERT INTO categories (household_id, name, type) VALUES
+    ('h_demo', 'Зарплата',    'income'),
+    ('h_demo', 'Фриланс',     'income'),
+    ('h_demo', 'Дивиденды',   'income'),
+    ('h_demo', 'Купоны',      'income'),
+    ('h_demo', 'Еда',         'expense'),
+    ('h_demo', 'Транспорт',   'expense'),
+    ('h_demo', 'Жильё',       'expense'),
+    ('h_demo', 'Развлечения', 'expense'),
+    ('h_demo', 'Здоровье',    'expense');
 
 -- ===== Бумаги =====
 INSERT INTO securities (ticker, isin, name, type, currency, face_value, coupon_rate, maturity_date) VALUES

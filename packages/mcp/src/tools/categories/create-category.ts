@@ -10,10 +10,11 @@ export function registerCreateCategoryTool(
     "create-category",
     {
       description:
-        "Create a new category for classifying income or expense transactions (e.g. 'Groceries', 'Salary'). Category names must be unique.",
+        "Create a new category for classifying income or expense transactions (e.g. 'Groceries', 'Salary'). Category names must be unique within the household.",
       annotations: { readOnlyHint: false },
       inputSchema: {
-        name: z.string().describe("A unique, human-readable category name."),
+        householdId: z.string().describe("The id of the household that owns this category."),
+        name: z.string().describe("A human-readable category name, unique within the household."),
         type: z
           .nativeEnum(CategoryType)
           .describe(

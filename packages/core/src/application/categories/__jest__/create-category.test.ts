@@ -10,10 +10,11 @@ describe("createCategory", () => {
 
     const result = await createCategory(
       { categoryRepo },
-      { name: "Groceries", type: CategoryType.EXPENSE },
+      { householdId: "h_demo", name: "Groceries", type: CategoryType.EXPENSE },
     );
 
     expect(categoryRepo.create).toHaveBeenCalledWith({
+      household_id: "h_demo",
       name: "Groceries",
       type: CategoryType.EXPENSE,
       is_archived: false,

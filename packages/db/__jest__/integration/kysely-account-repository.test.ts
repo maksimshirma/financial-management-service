@@ -9,14 +9,14 @@ const repo = new KyselyAccountRepository(db);
 beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
-function seedUser() {
-  return 1;
+function seedHousehold() {
+  return "h_demo";
 }
 
 test("create returns the row with a generated id", async () => {
-  const userId = await seedUser();
+  const householdId = await seedHousehold();
   const account = await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,
@@ -26,10 +26,10 @@ test("create returns the row with a generated id", async () => {
   expect(account.name).toBe("Cash");
 });
 
-test("create rejects a duplicate (user_id, name)", async () => {
-  const userId = await seedUser();
+test("create rejects a duplicate (household_id, name)", async () => {
+  const householdId = await seedHousehold();
   await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,
@@ -38,7 +38,7 @@ test("create rejects a duplicate (user_id, name)", async () => {
 
   await expect(
     repo.create({
-      user_id: userId,
+      household_id: householdId,
       name: "Cash",
       type: AccountType.CASH,
       currency: Currency.RUB,
@@ -51,31 +51,31 @@ test("findById returns null when nothing matches", async () => {
   await expect(repo.findById(999999)).resolves.toBeNull();
 });
 
-test("findByName finds within a user, not across users", async () => {
-  const userId = await seedUser();
+test("findByName finds within a household, not across households", async () => {
+  const householdId = await seedHousehold();
   await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,
     is_archived: false,
   });
 
-  await expect(repo.findByName(userId, "Cash")).resolves.not.toBeNull();
-  await expect(repo.findByName(userId, "Nope")).resolves.toBeNull();
+  await expect(repo.findByName(householdId, "Cash")).resolves.not.toBeNull();
+  await expect(repo.findByName(householdId, "Nope")).resolves.toBeNull();
 });
 
-test("findAllByUser excludes archived, findArchivedByUser returns only archived", async () => {
-  const userId = await seedUser();
+test("findAllByHousehold excludes archived, findArchivedByHousehold returns only archived", async () => {
+  const householdId = await seedHousehold();
   const active = await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,
     is_archived: false,
   });
   const toArchive = await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Card",
     type: AccountType.CARD,
     currency: Currency.RUB,
@@ -83,17 +83,17 @@ test("findAllByUser excludes archived, findArchivedByUser returns only archived"
   });
   await repo.archive(toArchive.account_id);
 
-  const activeAccounts = await repo.findAllByUser(userId);
+  const activeAccounts = await repo.findAllByHousehold(householdId);
   expect(activeAccounts.map((a) => a.account_id)).toEqual([active.account_id]);
 
-  const archivedAccounts = await repo.findArchivedByUser(userId);
+  const archivedAccounts = await repo.findArchivedByHousehold(householdId);
   expect(archivedAccounts.map((a) => a.account_id)).toEqual([toArchive.account_id]);
 });
 
 test("update changes fields and rejects a name collision", async () => {
-  const userId = await seedUser();
+  const householdId = await seedHousehold();
   const account = await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,
@@ -104,7 +104,7 @@ test("update changes fields and rejects a name collision", async () => {
   await expect(repo.findById(account.account_id)).resolves.toMatchObject({ name: "Renamed" });
 
   await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Card",
     type: AccountType.CARD,
     currency: Currency.RUB,
@@ -119,7 +119,7 @@ test("update on a missing id throws NotFoundError", async () => {
   await expect(
     repo.update({
       account_id: 999999,
-      user_id: 1,
+      household_id: "h_demo",
       name: "x",
       type: AccountType.CASH,
       currency: Currency.RUB,
@@ -129,9 +129,9 @@ test("update on a missing id throws NotFoundError", async () => {
 });
 
 test("archive flips is_archived", async () => {
-  const userId = await seedUser();
+  const householdId = await seedHousehold();
   const account = await repo.create({
-    user_id: userId,
+    household_id: householdId,
     name: "Cash",
     type: AccountType.CASH,
     currency: Currency.RUB,

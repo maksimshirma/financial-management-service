@@ -10,7 +10,7 @@ export enum AccountType {
 
 export interface AccountsTable {
   account_id: number;
-  user_id: number;
+  household_id: string;
   name: string;
   type: AccountType;
   currency: Currency;

@@ -2,14 +2,14 @@ import { buildAccount, createMockAccountRepository } from "./mock-account-reposi
 import { listArchivedAccounts } from "../list-archived-accounts.js";
 
 describe("listArchivedAccounts", () => {
-  it("delegates to accountRepo.findArchivedByUser", async () => {
+  it("delegates to accountRepo.findArchivedByHousehold", async () => {
     const accountRepo = createMockAccountRepository();
     const accounts = [buildAccount({ is_archived: true })];
-    accountRepo.findArchivedByUser.mockResolvedValue(accounts);
+    accountRepo.findArchivedByHousehold.mockResolvedValue(accounts);
 
-    const result = await listArchivedAccounts({ accountRepo }, 1);
+    const result = await listArchivedAccounts({ accountRepo }, "h_demo");
 
-    expect(accountRepo.findArchivedByUser).toHaveBeenCalledWith(1);
+    expect(accountRepo.findArchivedByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(accounts);
   });
 });

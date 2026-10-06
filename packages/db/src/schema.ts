@@ -11,7 +11,7 @@ type Numeric = ColumnType<number, number | string, number | string>;
 
 export interface AccountRow {
   account_id: Generated<number>;
-  user_id: number;
+  household_id: string;
   name: string;
   type: AccountType;
   currency: Currency;
@@ -20,6 +20,7 @@ export interface AccountRow {
 
 export interface CategoryRow {
   category_id: Generated<number>;
+  household_id: string;
   name: string;
   type: CategoryType;
   is_archived: boolean;

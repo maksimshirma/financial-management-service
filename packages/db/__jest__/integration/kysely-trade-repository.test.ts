@@ -12,7 +12,7 @@ afterAll(() => db.destroy());
 async function seedAccount() {
   const account = await db
     .insertInto("accounts")
-    .values({ user_id: 1, name: "Broker", type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
+    .values({ household_id: "h_demo", name: "Broker", type: AccountType.BROKER, currency: Currency.RUB, is_archived: false })
     .returningAll()
     .executeTakeFirstOrThrow();
   return account.account_id;

@@ -10,14 +10,14 @@ export function registerCreateAccountTool(
     "create-account",
     {
       description:
-        "Create a new financial account for a user (e.g. a bank account, cash wallet, credit card, or brokerage account). Returns the created account including its generated id.",
+        "Create a new financial account for a household (e.g. a bank account, cash wallet, credit card, or brokerage account). Returns the created account including its generated id.",
       annotations: { readOnlyHint: false },
       inputSchema: {
-        userId: z.number().describe("The id of the user who owns this account."),
+        householdId: z.string().describe("The id of the household that owns this account."),
         name: z
           .string()
           .describe(
-            "A human-readable name for the account, unique per user (e.g. 'Tinkoff Checking', 'Cash').",
+            "A human-readable name for the account, unique per household (e.g. 'Tinkoff Checking', 'Cash').",
           ),
         type: z
           .nativeEnum(AccountType)

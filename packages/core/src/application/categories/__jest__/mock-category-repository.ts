@@ -5,8 +5,8 @@ export function createMockCategoryRepository(): jest.Mocked<CategoryRepository> 
   return {
     findById: jest.fn(),
     findByName: jest.fn(),
-    listAll: jest.fn(),
-    listArchived: jest.fn(),
+    listAllByHousehold: jest.fn(),
+    listArchivedByHousehold: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
     archive: jest.fn(),
@@ -16,6 +16,7 @@ export function createMockCategoryRepository(): jest.Mocked<CategoryRepository> 
 export function buildCategory(overrides: Partial<CategoriesTable> = {}): CategoriesTable {
   return {
     category_id: 1,
+    household_id: "h_demo",
     name: "Groceries",
     type: CategoryType.EXPENSE,
     is_archived: false,

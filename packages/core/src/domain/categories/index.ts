@@ -5,6 +5,7 @@ export enum CategoryType {
 
 export interface CategoriesTable {
   category_id: number;
+  household_id: string;
   name: string;
   type: CategoryType;
   is_archived: boolean;

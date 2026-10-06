@@ -2,14 +2,14 @@ import { buildCategory, createMockCategoryRepository } from "./mock-category-rep
 import { listCategories } from "../list-categories.js";
 
 describe("listCategories", () => {
-  it("delegates to categoryRepo.listAll", async () => {
+  it("delegates to categoryRepo.listAllByHousehold", async () => {
     const categoryRepo = createMockCategoryRepository();
     const categories = [buildCategory()];
-    categoryRepo.listAll.mockResolvedValue(categories);
+    categoryRepo.listAllByHousehold.mockResolvedValue(categories);
 
-    const result = await listCategories({ categoryRepo });
+    const result = await listCategories({ categoryRepo }, "h_demo");
 
-    expect(categoryRepo.listAll).toHaveBeenCalled();
+    expect(categoryRepo.listAllByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(categories);
   });
 });

@@ -10,7 +10,7 @@ export interface UpdateAccountInput {
 
 /**
  * @throws {NotFoundError} account does not exist
- * @throws {DuplicateEntryError} (user_id, name) already taken
+ * @throws {DuplicateEntryError} (household_id, name) already taken
  */
 export async function updateAccount(
   deps: { accountRepo: AccountRepository },

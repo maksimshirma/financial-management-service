@@ -23,28 +23,36 @@ export class KyselyCategoryRepository implements CategoryRepository {
   }
 
   async findByName(
+    householdId: CategoriesTable["household_id"],
     name: CategoriesTable["name"],
   ): Promise<CategoriesTable | null> {
     const row = await this.db
       .selectFrom("categories")
       .selectAll()
+      .where("household_id", "=", householdId)
       .where("name", "=", name)
       .executeTakeFirst();
     return row ?? null;
   }
 
-  async listAll(): Promise<CategoriesTable[]> {
+  async listAllByHousehold(
+    householdId: CategoriesTable["household_id"],
+  ): Promise<CategoriesTable[]> {
     return this.db
       .selectFrom("categories")
       .selectAll()
+      .where("household_id", "=", householdId)
       .where("is_archived", "=", false)
       .execute();
   }
 
-  async listArchived(): Promise<CategoriesTable[]> {
+  async listArchivedByHousehold(
+    householdId: CategoriesTable["household_id"],
+  ): Promise<CategoriesTable[]> {
     return this.db
       .selectFrom("categories")
       .selectAll()
+      .where("household_id", "=", householdId)
       .where("is_archived", "=", true)
       .execute();
   }

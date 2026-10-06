@@ -10,11 +10,11 @@ describe("createAccount", () => {
 
     const result = await createAccount(
       { accountRepo },
-      { userId: 1, name: "Cash", type: AccountType.CASH, currency: Currency.RUB },
+      { householdId: "h_demo", name: "Cash", type: AccountType.CASH, currency: Currency.RUB },
     );
 
     expect(accountRepo.create).toHaveBeenCalledWith({
-      user_id: 1,
+      household_id: "h_demo",
       name: "Cash",
       type: AccountType.CASH,
       currency: Currency.RUB,

@@ -3,7 +3,7 @@ import { AccountRepository } from "../ports/index.js";
 
 export async function listArchivedAccounts(
   deps: { accountRepo: AccountRepository },
-  userId: AccountsTable["user_id"],
+  householdId: AccountsTable["household_id"],
 ) {
-  return deps.accountRepo.findArchivedByUser(userId);
+  return deps.accountRepo.findArchivedByHousehold(householdId);
 }

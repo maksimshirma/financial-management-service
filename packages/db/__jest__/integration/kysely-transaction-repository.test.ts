@@ -9,32 +9,32 @@ const repo = new KyselyTransactionRepository(db);
 beforeEach(() => truncateAllTables(db));
 afterAll(() => db.destroy());
 
-function seedUser() {
-  return 1;
+function seedHousehold() {
+  return "h_demo";
 }
 
-async function seedAccount(userId: number, name = "Cash") {
+async function seedAccount(householdId: string, name = "Cash") {
   const row = await db
     .insertInto("accounts")
-    .values({ user_id: userId, name, type: AccountType.CASH, currency: Currency.RUB, is_archived: false })
+    .values({ household_id: householdId, name, type: AccountType.CASH, currency: Currency.RUB, is_archived: false })
     .returningAll()
     .executeTakeFirstOrThrow();
   return row.account_id;
 }
 
-async function seedCategory(type = CategoryType.EXPENSE) {
+async function seedCategory(householdId: string, type = CategoryType.EXPENSE) {
   const row = await db
     .insertInto("categories")
-    .values({ name: `Category ${Math.random()}`, type, is_archived: false })
+    .values({ household_id: householdId, name: `Category ${Math.random()}`, type, is_archived: false })
     .returningAll()
     .executeTakeFirstOrThrow();
   return row.category_id;
 }
 
 test("create (income/expense) returns the row with correct numeric amount", async () => {
-  const userId = await seedUser();
-  const accountId = await seedAccount(userId);
-  const categoryId = await seedCategory();
+  const householdId = seedHousehold();
+  const accountId = await seedAccount(householdId);
+  const categoryId = await seedCategory(householdId);
 
   const transaction = await repo.create({
     date: new Date("2026-09-06"),
@@ -54,9 +54,9 @@ test("create (income/expense) returns the row with correct numeric amount", asyn
 });
 
 test("create (transfer) roundtrips to_account_id/to_amount as undefined-safe optional fields", async () => {
-  const userId = await seedUser();
-  const accountId = await seedAccount(userId, "Cash");
-  const toAccountId = await seedAccount(userId, "Broker");
+  const householdId = seedHousehold();
+  const accountId = await seedAccount(householdId, "Cash");
+  const toAccountId = await seedAccount(householdId, "Broker");
 
   const transaction = await repo.create({
     date: new Date("2026-09-16"),
@@ -76,8 +76,8 @@ test("create (transfer) roundtrips to_account_id/to_amount as undefined-safe opt
 });
 
 test("create with a nonexistent account throws NotFoundError", async () => {
-  const userId = await seedUser();
-  const categoryId = await seedCategory();
+  const householdId = seedHousehold();
+  const categoryId = await seedCategory(householdId);
   await expect(
     repo.create({
       date: new Date(),
@@ -90,8 +90,8 @@ test("create with a nonexistent account throws NotFoundError", async () => {
 });
 
 test("create with a nonexistent category throws NotFoundError", async () => {
-  const userId = await seedUser();
-  const accountId = await seedAccount(userId);
+  const householdId = seedHousehold();
+  const accountId = await seedAccount(householdId);
   await expect(
     repo.create({
       date: new Date(),
@@ -104,10 +104,10 @@ test("create with a nonexistent category throws NotFoundError", async () => {
 });
 
 test("find combines accountId and date range filters", async () => {
-  const userId = await seedUser();
-  const accountA = await seedAccount(userId, "Cash");
-  const accountB = await seedAccount(userId, "Card");
-  const categoryId = await seedCategory();
+  const householdId = seedHousehold();
+  const accountA = await seedAccount(householdId, "Cash");
+  const accountB = await seedAccount(householdId, "Card");
+  const categoryId = await seedCategory(householdId);
 
   const early = await repo.create({ date: new Date("2026-01-01"), account_id: accountA, amount: 1, category_id: categoryId, is_transfer: false });
   const late = await repo.create({ date: new Date("2026-12-01"), account_id: accountA, amount: 1, category_id: categoryId, is_transfer: false });
@@ -122,9 +122,9 @@ test("find combines accountId and date range filters", async () => {
 });
 
 test("update changes fields, missing id throws NotFoundError", async () => {
-  const userId = await seedUser();
-  const accountId = await seedAccount(userId);
-  const categoryId = await seedCategory();
+  const householdId = seedHousehold();
+  const accountId = await seedAccount(householdId);
+  const categoryId = await seedCategory(householdId);
   const transaction = await repo.create({ date: new Date("2026-09-06"), account_id: accountId, amount: 100, category_id: categoryId, is_transfer: false });
 
   await repo.update({ ...transaction, note: "updated note" });
@@ -136,9 +136,9 @@ test("update changes fields, missing id throws NotFoundError", async () => {
 });
 
 test("delete removes the row, missing id throws NotFoundError", async () => {
-  const userId = await seedUser();
-  const accountId = await seedAccount(userId);
-  const categoryId = await seedCategory();
+  const householdId = seedHousehold();
+  const accountId = await seedAccount(householdId);
+  const categoryId = await seedCategory(householdId);
   const transaction = await repo.create({ date: new Date("2026-09-06"), account_id: accountId, amount: 100, category_id: categoryId, is_transfer: false });
 
   await repo.delete(transaction.transaction_id);

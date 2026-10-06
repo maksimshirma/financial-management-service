@@ -2,14 +2,14 @@ import { buildCategory, createMockCategoryRepository } from "./mock-category-rep
 import { listArchivedCategories } from "../list-archived-categories.js";
 
 describe("listArchivedCategories", () => {
-  it("delegates to categoryRepo.listArchived", async () => {
+  it("delegates to categoryRepo.listArchivedByHousehold", async () => {
     const categoryRepo = createMockCategoryRepository();
     const categories = [buildCategory({ is_archived: true })];
-    categoryRepo.listArchived.mockResolvedValue(categories);
+    categoryRepo.listArchivedByHousehold.mockResolvedValue(categories);
 
-    const result = await listArchivedCategories({ categoryRepo });
+    const result = await listArchivedCategories({ categoryRepo }, "h_demo");
 
-    expect(categoryRepo.listArchived).toHaveBeenCalled();
+    expect(categoryRepo.listArchivedByHousehold).toHaveBeenCalledWith("h_demo");
     expect(result).toBe(categories);
   });
 });

@@ -23,36 +23,36 @@ export class KyselyAccountRepository implements AccountRepository {
   }
 
   async findByName(
-    userId: AccountsTable["user_id"],
+    householdId: AccountsTable["household_id"],
     name: string,
   ): Promise<AccountsTable | null> {
     const row = await this.db
       .selectFrom("accounts")
       .selectAll()
-      .where("user_id", "=", userId)
+      .where("household_id", "=", householdId)
       .where("name", "=", name)
       .executeTakeFirst();
     return row ?? null;
   }
 
-  async findAllByUser(
-    userId: AccountsTable["user_id"],
+  async findAllByHousehold(
+    householdId: AccountsTable["household_id"],
   ): Promise<AccountsTable[]> {
     return this.db
       .selectFrom("accounts")
       .selectAll()
-      .where("user_id", "=", userId)
+      .where("household_id", "=", householdId)
       .where("is_archived", "=", false)
       .execute();
   }
 
-  async findArchivedByUser(
-    userId: AccountsTable["user_id"],
+  async findArchivedByHousehold(
+    householdId: AccountsTable["household_id"],
   ): Promise<AccountsTable[]> {
     return this.db
       .selectFrom("accounts")
       .selectAll()
-      .where("user_id", "=", userId)
+      .where("household_id", "=", householdId)
       .where("is_archived", "=", true)
       .execute();
   }

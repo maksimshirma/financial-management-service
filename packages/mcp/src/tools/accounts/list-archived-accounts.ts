@@ -10,14 +10,14 @@ export function registerListArchivedAccountsTool(
     "list-archived-accounts",
     {
       description:
-        "List a user's archived accounts. Archived accounts are excluded from list-accounts but their history is preserved.",
+        "List a household's archived accounts. Archived accounts are excluded from list-accounts but their history is preserved.",
       annotations: { readOnlyHint: true },
       inputSchema: {
-        userId: z.number().describe("The id of the user whose archived accounts to list."),
+        householdId: z.string().describe("The id of the household whose archived accounts to list."),
       },
     },
-    async ({ userId }) => {
-      const accounts = await listArchivedAccounts(deps, userId);
+    async ({ householdId }) => {
+      const accounts = await listArchivedAccounts(deps, householdId);
       return { content: [{ type: "text", text: JSON.stringify(accounts) }] };
     },
   );

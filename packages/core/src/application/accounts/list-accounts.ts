@@ -3,7 +3,7 @@ import { AccountRepository } from "../ports/index.js";
 
 export async function listAccounts(
   deps: { accountRepo: AccountRepository },
-  userId: AccountsTable["user_id"],
+  householdId: AccountsTable["household_id"],
 ) {
-  return deps.accountRepo.findAllByUser(userId);
+  return deps.accountRepo.findAllByHousehold(householdId);
 }
