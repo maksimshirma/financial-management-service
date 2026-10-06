@@ -18,6 +18,7 @@ export * from "./quotes/get-security-quote.js";
 export * from "./securities/archive-security.js";
 export * from "./securities/create-security.js";
 export * from "./securities/find-security-by-ticker.js";
+export * from "./securities/get-bond-schedule.js";
 export * from "./securities/import-security.js";
 export * from "./securities/list-archived-securities.js";
 export * from "./securities/list-securities.js";

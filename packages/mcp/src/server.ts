@@ -25,6 +25,7 @@ import { registerUpdateCategoryTool } from "./tools/categories/update-category.j
 import { registerArchiveSecurityTool } from "./tools/securities/archive-security.js";
 import { registerCreateSecurityTool } from "./tools/securities/create-security.js";
 import { registerFindSecurityByTickerTool } from "./tools/securities/find-security-by-ticker.js";
+import { registerGetBondScheduleTool } from "./tools/securities/get-bond-schedule.js";
 import { registerImportSecurityTool } from "./tools/securities/import-security.js";
 import { registerListArchivedSecuritiesTool } from "./tools/securities/list-archived-securities.js";
 import { registerListSecuritiesTool } from "./tools/securities/list-securities.js";
@@ -81,6 +82,7 @@ export function createServer(deps: ServerDeps): McpServer {
   registerFindSecurityByTickerTool(server, deps);
   registerSearchSecuritiesTool(server, deps);
   registerImportSecurityTool(server, deps);
+  registerGetBondScheduleTool(server, deps);
 
   registerRecordIncomeExpenseTool(server, deps);
   registerTransferBetweenAccountsTool(server, deps);
