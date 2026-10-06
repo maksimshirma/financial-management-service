@@ -11,6 +11,7 @@ export function registerArchiveSecurityTool(
     {
       description:
         "Archive a security, hiding it from the active list while preserving trade/dividend history. There is no hard-delete for securities.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         securityId: z.number().describe("The id of the security to archive."),
       },

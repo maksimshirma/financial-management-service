@@ -11,6 +11,7 @@ export function registerUpdateSecurityTool(
     {
       description:
         "Update a security's mutable fields. The ticker, isin, type, and currency identify the instrument and can't be changed — create a new security if those are wrong.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         securityId: z.number().describe("The id of the security to update."),
         name: z.string().optional().describe("New name, replacing the current one."),

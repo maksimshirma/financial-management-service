@@ -11,6 +11,7 @@ export function registerCreateCategoryTool(
     {
       description:
         "Create a new category for classifying income or expense transactions (e.g. 'Groceries', 'Salary'). Category names must be unique.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         name: z.string().describe("A unique, human-readable category name."),
         type: z

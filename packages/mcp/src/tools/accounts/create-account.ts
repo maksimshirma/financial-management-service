@@ -11,6 +11,7 @@ export function registerCreateAccountTool(
     {
       description:
         "Create a new financial account for a user (e.g. a bank account, cash wallet, credit card, or brokerage account). Returns the created account including its generated id.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         userId: z.number().describe("The id of the user who owns this account."),
         name: z

@@ -10,6 +10,7 @@ export function registerDeleteTradeTool(
     "delete-trade",
     {
       description: "Permanently delete a trade, e.g. to remove a mistaken entry.",
+      annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         tradeId: z.number().describe("The id of the trade to delete."),
       },

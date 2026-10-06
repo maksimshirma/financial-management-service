@@ -11,6 +11,7 @@ export function registerArchiveAccountTool(
     {
       description:
         "Archive an account, hiding it from the active account list while preserving its full transaction history. There is no hard-delete for accounts — use this for a closed or unused account.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         accountId: z.number().describe("The id of the account to archive."),
       },

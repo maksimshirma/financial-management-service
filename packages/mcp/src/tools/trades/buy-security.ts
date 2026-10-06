@@ -11,6 +11,7 @@ export function registerBuySecurityTool(
     {
       description:
         "Record the purchase of a security on a brokerage account. This only records the trade — it does not separately record the cash movement as a transaction.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         accountId: z.number().describe("The brokerage account the security was bought into."),
         securityId: z

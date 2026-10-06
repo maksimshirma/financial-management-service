@@ -11,6 +11,7 @@ export function registerCreateSecurityTool(
     {
       description:
         "Add a new security (stock, bond, or fund) to the reference list so it can be bought, sold, or referenced by dividend/coupon transactions. Bond-only fields (faceValue, couponRate, maturityDate) are ignored for stocks and funds.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         ticker: z.string().describe("Exchange ticker symbol, e.g. 'SBER', 'AAPL'. Must be unique."),
         isin: z

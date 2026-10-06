@@ -11,6 +11,7 @@ export function registerArchiveCategoryTool(
     {
       description:
         "Archive a category, hiding it from the active list while preserving the history of transactions that reference it. There is no hard-delete for categories.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         categoryId: z.number().describe("The id of the category to archive."),
       },

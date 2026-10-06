@@ -11,6 +11,7 @@ export function registerDeleteTransactionTool(
     {
       description:
         "Permanently delete a transaction, e.g. to remove a mistaken entry. Unlike accounts/categories/securities, transactions have no archive — this is a hard delete.",
+      annotations: { readOnlyHint: false, destructiveHint: true },
       inputSchema: {
         transactionId: z.number().describe("The id of the transaction to delete."),
       },

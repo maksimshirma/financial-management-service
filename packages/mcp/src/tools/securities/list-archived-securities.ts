@@ -9,6 +9,7 @@ export function registerListArchivedSecuritiesTool(
     "list-archived-securities",
     {
       description: "List archived securities.",
+      annotations: { readOnlyHint: true },
       inputSchema: {},
     },
     async () => {

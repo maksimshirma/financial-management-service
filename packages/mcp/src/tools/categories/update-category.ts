@@ -11,6 +11,7 @@ export function registerUpdateCategoryTool(
     {
       description:
         "Rename an existing category. A category's type (income/expense) can't be changed after creation — create a new category if the direction needs to change.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         categoryId: z.number().describe("The id of the category to rename."),
         name: z.string().describe("The new name."),

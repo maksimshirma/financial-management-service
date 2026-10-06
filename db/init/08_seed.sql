@@ -1,7 +1,3 @@
--- ===== Пользователь =====
-INSERT INTO users (name) VALUES
-    ('Максим');
-
 -- ===== Счета =====
 INSERT INTO accounts (user_id, name, type, currency) VALUES
     (1, 'Наличные',            'cash',    'RUB'),

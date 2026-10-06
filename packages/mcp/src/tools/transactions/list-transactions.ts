@@ -11,6 +11,7 @@ export function registerListTransactionsTool(
     {
       description:
         "List transactions, optionally narrowed by account and/or date range. Filters combine with AND. Omit all filters to list everything.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         accountId: z.number().optional().describe("Only return transactions on this account."),
         from: z.coerce.date().optional().describe("Only return transactions on or after this date."),

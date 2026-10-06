@@ -11,6 +11,7 @@ export function registerUpdateTradeTool(
     {
       description:
         "Correct one or more fields on an existing trade. The account and security a trade belongs to can't be changed — delete and re-create the trade if those are wrong.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         tradeId: z.number().describe("The id of the trade to update."),
         date: z.coerce.date().optional().describe("New trade date, replacing the current one."),

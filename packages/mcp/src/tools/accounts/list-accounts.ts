@@ -11,6 +11,7 @@ export function registerListAccountsTool(
     {
       description:
         "List a user's active (non-archived) accounts. Use this to find an account's id before recording a transaction or trade against it.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         userId: z.number().describe("The id of the user whose accounts to list."),
       },

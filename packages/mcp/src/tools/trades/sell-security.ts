@@ -11,6 +11,7 @@ export function registerSellSecurityTool(
     {
       description:
         "Record the sale of a security on a brokerage account. The system does not check whether the account actually holds enough of the security to sell — that's the caller's responsibility.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         accountId: z.number().describe("The brokerage account the security was sold from."),
         securityId: z

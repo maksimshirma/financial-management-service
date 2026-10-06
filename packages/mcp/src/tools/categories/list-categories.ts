@@ -10,6 +10,7 @@ export function registerListCategoriesTool(
     {
       description:
         "List active (non-archived) income/expense categories. Use this to find a categoryId before recording a transaction.",
+      annotations: { readOnlyHint: true },
       inputSchema: {},
     },
     async () => {

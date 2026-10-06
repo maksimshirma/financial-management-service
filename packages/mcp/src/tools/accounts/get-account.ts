@@ -11,6 +11,7 @@ export function registerGetAccountTool(
     {
       description:
         "Fetch a single account by its id. Returns 'Not found' if no account with that id exists.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         accountId: z.number().describe("The id of the account to fetch."),
       },

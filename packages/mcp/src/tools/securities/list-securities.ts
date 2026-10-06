@@ -10,6 +10,7 @@ export function registerListSecuritiesTool(
     {
       description:
         "List active (non-archived) securities. Use this, or find-security-by-ticker, to find a securityId before recording a trade.",
+      annotations: { readOnlyHint: true },
       inputSchema: {},
     },
     async () => {

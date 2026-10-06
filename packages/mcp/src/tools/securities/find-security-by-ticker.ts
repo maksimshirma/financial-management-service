@@ -11,6 +11,7 @@ export function registerFindSecurityByTickerTool(
     {
       description:
         "Look up a single security by its exact ticker symbol (e.g. 'SBER'). Returns 'Not found' if none is registered — use create-security to add it first.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         ticker: z.string().describe("The exact ticker symbol to search for."),
       },

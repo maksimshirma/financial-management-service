@@ -11,6 +11,7 @@ export function registerListTradesTool(
     {
       description:
         "List trades, optionally narrowed by account, security, and/or date range. Filters combine with AND. Omit all filters to list everything.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         accountId: z.number().optional().describe("Only return trades on this account."),
         securityId: z.number().optional().describe("Only return trades in this security."),

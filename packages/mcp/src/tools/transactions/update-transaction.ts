@@ -11,6 +11,7 @@ export function registerUpdateTransactionTool(
     {
       description:
         "Correct one or more fields on an existing transaction. Only the fields provided are changed.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         transactionId: z.number().describe("The id of the transaction to update."),
         date: z.coerce.date().optional().describe("New transaction date, replacing the current one."),

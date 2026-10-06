@@ -11,6 +11,7 @@ export function registerListArchivedAccountsTool(
     {
       description:
         "List a user's archived accounts. Archived accounts are excluded from list-accounts but their history is preserved.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         userId: z.number().describe("The id of the user whose archived accounts to list."),
       },

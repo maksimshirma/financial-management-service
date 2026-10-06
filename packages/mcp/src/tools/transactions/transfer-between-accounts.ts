@@ -11,6 +11,7 @@ export function registerTransferBetweenAccountsTool(
     {
       description:
         "Move money from one of the user's own accounts to another (e.g. topping up a brokerage account from a checking account). Not for paying external parties — use record-income-expense with an expense category for that.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         accountId: z.number().describe("The source account money is taken from."),
         toAccountId: z

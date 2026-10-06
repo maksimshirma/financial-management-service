@@ -9,6 +9,7 @@ export function registerListArchivedCategoriesTool(
     "list-archived-categories",
     {
       description: "List archived categories.",
+      annotations: { readOnlyHint: true },
       inputSchema: {},
     },
     async () => {

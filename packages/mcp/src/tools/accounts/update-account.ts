@@ -11,6 +11,7 @@ export function registerUpdateAccountTool(
     {
       description:
         "Change an existing account's name, type, or currency. Only the fields provided are changed; omitted fields keep their current value.",
+      annotations: { readOnlyHint: false },
       inputSchema: {
         accountId: z
           .number()
