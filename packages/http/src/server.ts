@@ -1,5 +1,6 @@
-import express, { type Express } from "express";
+import express, { type Express, type Router } from "express";
 import type { JWTVerifyGetKey } from "jose";
+import swaggerUi from "swagger-ui-express";
 import {
   type AccountRepository,
   type CategoryRepository,
@@ -9,6 +10,7 @@ import {
   type TradeRepository,
   type TransactionRepository,
 } from "@fms/core";
+import { buildOpenApiDocument } from "./dto/openapi.js";
 import { authenticate } from "./middleware/authenticate.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { createAccountsRouter } from "./routes/accounts.js";
@@ -33,6 +35,18 @@ export interface CreateServerOptions {
   jwks: JWTVerifyGetKey;
 }
 
+/** Mount prefix → router; also what the OpenAPI coverage test walks. */
+export function createRouters(deps: ServerDeps): Record<string, Router> {
+  return {
+    "/accounts": createAccountsRouter(deps),
+    "/categories": createCategoriesRouter(deps),
+    "/securities": createSecuritiesRouter(deps),
+    "/transactions": createTransactionsRouter(deps),
+    "/trades": createTradesRouter(deps),
+    "/portfolio": createPortfolioRouter(deps),
+  };
+}
+
 export function createServer(deps: ServerDeps, options: CreateServerOptions): Express {
   const app = express();
 
@@ -40,15 +54,23 @@ export function createServer(deps: ServerDeps, options: CreateServerOptions): Ex
     res.status(200).json({ status: "ok" });
   });
 
+  // API description is public; calls made from the UI still need a token (Authorize).
+  const openApi = buildOpenApiDocument();
+  app.get("/openapi.json", (_req, res) => {
+    res.json(openApi);
+  });
+  app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(openApi, { swaggerOptions: { persistAuthorization: true } }),
+  );
+
   app.use(express.json());
   app.use(authenticate(options.jwks));
 
-  app.use("/accounts", createAccountsRouter(deps));
-  app.use("/categories", createCategoriesRouter(deps));
-  app.use("/securities", createSecuritiesRouter(deps));
-  app.use("/transactions", createTransactionsRouter(deps));
-  app.use("/trades", createTradesRouter(deps));
-  app.use("/portfolio", createPortfolioRouter(deps));
+  for (const [prefix, router] of Object.entries(createRouters(deps))) {
+    app.use(prefix, router);
+  }
 
   app.use((_req, res) => {
     res.status(404).json({ error: "not_found" });

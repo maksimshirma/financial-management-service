@@ -1,9 +1,7 @@
 import { Router } from "express";
-import { z } from "zod";
 import {
   archiveSecurity,
   createSecurity,
-  Currency,
   findSecurityByTicker,
   getBondSchedule,
   getSecurityQuote,
@@ -11,12 +9,19 @@ import {
   listArchivedSecurities,
   listSecurities,
   searchSecurities,
-  SecurityType,
   updateSecurity,
   type Clock,
   type MarketDataProvider,
   type SecurityRepository,
 } from "@fms/core";
+import {
+  CreateSecurityBody,
+  ImportSecurityBody,
+  SearchSecuritiesQuery,
+  SecurityIdParams,
+  TickerParams,
+  UpdateSecurityBody,
+} from "../dto/schemas.js";
 import { requireHousehold } from "../middleware/require-household.js";
 import { requireScope } from "../middleware/require-scope.js";
 
@@ -32,52 +37,34 @@ export function createSecuritiesRouter(deps: {
 
   // exchange search — doesn't touch the household's list
   router.get("/search", requireScope("view"), async (req, res) => {
-    const { q } = z.object({ q: z.string().min(2) }).parse(req.query);
+    const { q } = SearchSecuritiesQuery.parse(req.query);
     res.json(await searchSecurities(deps, q));
   });
 
   router.post("/import", requireScope("edit"), async (req, res) => {
-    const { secid } = z.object({ secid: z.string() }).parse(req.body);
+    const { secid } = ImportSecurityBody.parse(req.body);
     const security = await importSecurity(deps, { householdId: req.auth.hid!, secid });
     res.status(201).json(security);
   });
 
   // hand-entered, private to the household — only for non-MOEX instruments
   router.post("/", requireScope("edit"), async (req, res) => {
-    const input = z
-      .object({
-        ticker: z.string(),
-        isin: z.string().optional(),
-        name: z.string(),
-        type: z.nativeEnum(SecurityType),
-        currency: z.nativeEnum(Currency),
-        faceValue: z.number().optional(),
-        couponRate: z.number().optional(),
-        maturityDate: z.coerce.date().optional(),
-      })
-      .parse(req.body);
+    const input = CreateSecurityBody.parse(req.body);
 
     const security = await createSecurity(deps, { householdId: req.auth.hid!, ...input });
     res.status(201).json(security);
   });
 
   router.patch("/:securityId", requireScope("edit"), async (req, res) => {
-    const securityId = z.coerce.number().parse(req.params.securityId);
-    const input = z
-      .object({
-        name: z.string().optional(),
-        faceValue: z.number().optional(),
-        couponRate: z.number().optional(),
-        maturityDate: z.coerce.date().optional(),
-      })
-      .parse(req.body);
+    const { securityId } = SecurityIdParams.parse(req.params);
+    const input = UpdateSecurityBody.parse(req.body);
 
     await updateSecurity(deps, { householdId: req.auth.hid!, securityId, ...input });
     res.status(204).end();
   });
 
   router.post("/:securityId/archive", requireScope("edit"), async (req, res) => {
-    const securityId = z.coerce.number().parse(req.params.securityId);
+    const { securityId } = SecurityIdParams.parse(req.params);
     await archiveSecurity(deps, req.auth.hid!, securityId);
     res.status(204).end();
   });
@@ -87,7 +74,7 @@ export function createSecuritiesRouter(deps: {
   });
 
   router.get("/by-ticker/:ticker", requireScope("view"), async (req, res) => {
-    const ticker = z.string().parse(req.params.ticker);
+    const { ticker } = TickerParams.parse(req.params);
     const security = await findSecurityByTicker(deps, req.auth.hid!, ticker);
     if (!security) {
       res.status(404).json({ error: "not_found" });
@@ -97,12 +84,12 @@ export function createSecuritiesRouter(deps: {
   });
 
   router.get("/:securityId/quote", requireScope("view"), async (req, res) => {
-    const securityId = z.coerce.number().parse(req.params.securityId);
+    const { securityId } = SecurityIdParams.parse(req.params);
     res.json(await getSecurityQuote(deps, req.auth.hid!, securityId));
   });
 
   router.get("/:securityId/coupons", requireScope("view"), async (req, res) => {
-    const securityId = z.coerce.number().parse(req.params.securityId);
+    const { securityId } = SecurityIdParams.parse(req.params);
     res.json(await getBondSchedule(deps, req.auth.hid!, securityId));
   });
 

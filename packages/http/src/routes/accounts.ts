@@ -1,16 +1,14 @@
 import { Router } from "express";
-import { z } from "zod";
 import {
-  AccountType,
   archiveAccount,
   createAccount,
-  Currency,
   getAccount,
   listAccounts,
   listArchivedAccounts,
   updateAccount,
   type AccountRepository,
 } from "@fms/core";
+import { AccountIdParams, CreateAccountBody, UpdateAccountBody } from "../dto/schemas.js";
 import { requireHousehold } from "../middleware/require-household.js";
 import { requireScope } from "../middleware/require-scope.js";
 
@@ -19,34 +17,22 @@ export function createAccountsRouter(deps: { accountRepo: AccountRepository }): 
   router.use(requireHousehold);
 
   router.post("/", requireScope("edit"), async (req, res) => {
-    const input = z
-      .object({
-        name: z.string(),
-        type: z.nativeEnum(AccountType),
-        currency: z.nativeEnum(Currency),
-      })
-      .parse(req.body);
+    const input = CreateAccountBody.parse(req.body);
 
     const account = await createAccount(deps, { householdId: req.auth.hid!, ...input });
     res.status(201).json(account);
   });
 
   router.patch("/:accountId", requireScope("edit"), async (req, res) => {
-    const accountId = z.coerce.number().parse(req.params.accountId);
-    const input = z
-      .object({
-        name: z.string().optional(),
-        type: z.nativeEnum(AccountType).optional(),
-        currency: z.nativeEnum(Currency).optional(),
-      })
-      .parse(req.body);
+    const { accountId } = AccountIdParams.parse(req.params);
+    const input = UpdateAccountBody.parse(req.body);
 
     await updateAccount(deps, { accountId, ...input });
     res.status(204).end();
   });
 
   router.post("/:accountId/archive", requireScope("edit"), async (req, res) => {
-    const accountId = z.coerce.number().parse(req.params.accountId);
+    const { accountId } = AccountIdParams.parse(req.params);
     await archiveAccount(deps, accountId);
     res.status(204).end();
   });
@@ -57,7 +43,7 @@ export function createAccountsRouter(deps: { accountRepo: AccountRepository }): 
   });
 
   router.get("/:accountId", requireScope("view"), async (req, res) => {
-    const accountId = z.coerce.number().parse(req.params.accountId);
+    const { accountId } = AccountIdParams.parse(req.params);
     const account = await getAccount(deps, accountId);
     if (!account) {
       res.status(404).json({ error: "not_found" });
