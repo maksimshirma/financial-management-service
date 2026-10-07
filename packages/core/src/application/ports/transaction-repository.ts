@@ -1,10 +1,13 @@
 import {
+  AccountsTable,
   NewTransaction,
   NotFoundError,
   TransactionsTable,
 } from "../../domain/index.js";
 
 export interface TransactionFilter {
+  /** transactions on any account of this household */
+  householdId?: AccountsTable["household_id"];
   accountId?: TransactionsTable["account_id"];
   from?: Date;
   to?: Date;

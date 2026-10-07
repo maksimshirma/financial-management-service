@@ -1,7 +1,19 @@
-import { NotFoundError, TransactionsTable } from "../../domain/index.js";
-import { TransactionRepository } from "../ports/index.js";
+import { AccountsTable, TransactionsTable } from "../../domain/index.js";
+import {
+  AccountRepository,
+  CategoryRepository,
+  SecurityRepository,
+  TransactionRepository,
+} from "../ports/index.js";
+import {
+  requireOwnAccount,
+  requireOwnCategory,
+  requireVisibleSecurity,
+} from "../households/household-access.js";
+import { requireOwnTransaction } from "./require-own-transaction.js";
 
 export interface UpdateTransactionInput {
+  householdId: AccountsTable["household_id"];
   transactionId: TransactionsTable["transaction_id"];
   date?: Date;
   amount?: number;
@@ -12,13 +24,30 @@ export interface UpdateTransactionInput {
   note?: TransactionsTable["note"];
 }
 
-/** @throws {NotFoundError} transaction, or a referenced account/category/security, does not exist */
+/**
+ * @throws {NotFoundError} transaction isn't on the household's account, or a
+ * newly referenced category/account/security doesn't exist or isn't the household's
+ */
 export async function updateTransaction(
-  deps: { transactionRepo: TransactionRepository },
+  deps: {
+    transactionRepo: TransactionRepository;
+    accountRepo: AccountRepository;
+    categoryRepo: CategoryRepository;
+    securityRepo: SecurityRepository;
+  },
   input: UpdateTransactionInput,
 ) {
-  const existing = await deps.transactionRepo.findById(input.transactionId);
-  if (!existing) throw new NotFoundError("Transaction", input.transactionId);
+  const { householdId } = input;
+  const existing = await requireOwnTransaction(deps, householdId, input.transactionId);
+  if (input.categoryId != null) {
+    await requireOwnCategory(deps.categoryRepo, householdId, input.categoryId);
+  }
+  if (input.toAccountId != null) {
+    await requireOwnAccount(deps.accountRepo, householdId, input.toAccountId);
+  }
+  if (input.securityId != null) {
+    await requireVisibleSecurity(deps.securityRepo, householdId, input.securityId);
+  }
 
   await deps.transactionRepo.update({
     ...existing,

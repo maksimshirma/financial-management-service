@@ -2,15 +2,14 @@ import { buildTrade, createMockTradeRepository } from "./mock-trade-repository.j
 import { listTrades } from "../list-trades.js";
 
 describe("listTrades", () => {
-  it("delegates the filter to tradeRepo.find", async () => {
+  it("always scopes the filter to the household", async () => {
     const tradeRepo = createMockTradeRepository();
     const trades = [buildTrade()];
     tradeRepo.find.mockResolvedValue(trades);
 
-    const filter = { securityId: 2 };
-    const result = await listTrades({ tradeRepo }, filter);
+    const result = await listTrades({ tradeRepo }, "h_demo", { securityId: 2 });
 
-    expect(tradeRepo.find).toHaveBeenCalledWith(filter);
+    expect(tradeRepo.find).toHaveBeenCalledWith({ securityId: 2, householdId: "h_demo" });
     expect(result).toBe(trades);
   });
 });

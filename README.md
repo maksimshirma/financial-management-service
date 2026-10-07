@@ -22,6 +22,7 @@
 - [`docs/db/kysely.md`](docs/db/kysely.md) — работа с БД из кода, миграции
 - [`docs/db/fixtures.md`](docs/db/fixtures.md) — тестовая БД для интеграционных тестов
 - [`docs/db/pgadmin.md`](docs/db/pgadmin.md) — веб-интерфейс для Postgres
+- [`docs/http.md`](docs/http.md) — REST API: аутентификация, маршруты, коды ошибок
 - [`docs/mcp.md`](docs/mcp.md) — запуск MCP-сервера (Docker/stdio/HTTP), подключение к Claude Desktop/Code
 - [`docs/test/test.md`](docs/test/test.md) — тестовая инфраструктура (Jest, один конфиг на монорепо)
 - [`docs/test/integrations.md`](docs/test/integrations.md) — подход к интеграционным тестам

@@ -1,7 +1,9 @@
-import { NotFoundError, TradesTable } from "../../domain/index.js";
-import { TradeRepository } from "../ports/index.js";
+import { AccountsTable, TradesTable } from "../../domain/index.js";
+import { AccountRepository, TradeRepository } from "../ports/index.js";
+import { requireOwnTrade } from "./require-own-trade.js";
 
 export interface UpdateTradeInput {
+  householdId: AccountsTable["household_id"];
   tradeId: TradesTable["trade_id"];
   date?: Date;
   quantity?: number;
@@ -10,13 +12,12 @@ export interface UpdateTradeInput {
   fee?: number;
 }
 
-/** @throws {NotFoundError} trade, or a referenced account/security, does not exist */
+/** @throws {NotFoundError} trade does not exist or is on another household's account */
 export async function updateTrade(
-  deps: { tradeRepo: TradeRepository },
+  deps: { tradeRepo: TradeRepository; accountRepo: AccountRepository },
   input: UpdateTradeInput,
 ) {
-  const existing = await deps.tradeRepo.findById(input.tradeId);
-  if (!existing) throw new NotFoundError("Trade", input.tradeId);
+  const existing = await requireOwnTrade(deps, input.householdId, input.tradeId);
 
   await deps.tradeRepo.update({
     ...existing,

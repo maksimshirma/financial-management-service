@@ -232,7 +232,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | pnpm exec tsx src/main.t
 | quotes       | `get-security-quote` |
 | portfolio    | `get-portfolio-value` |
 
-Бумаги Мосбиржи заводятся через `search-securities` → `import-security` (реквизиты берутся из ISS, бумага попадает в общий справочник и в список домохозяйства). `create-security` — только для бумаг вне Мосбиржи, такая бумага видна лишь своему домохозяйству. Котировки ISS отдаёт с задержкой 15 минут; при недоступности ISS `get-portfolio-value` не падает, а возвращает позиции в `unpriced` и `quotesError`.
+Бумаги Мосбиржи заводятся через `search-securities` → `import-security` (реквизиты берутся из ISS, бумага попадает в общий справочник и в список домохозяйства). `create-security` — только для бумаг вне Мосбиржи, такая бумага видна лишь своему домохозяйству. Tool'ы, работающие с данными домохозяйства (accounts/categories/securities/trades/transactions/portfolio), принимают `householdId`: чужие сделки, операции, приватные бумаги и счета/категории, на которые они ссылаются, для них не существуют (`not found`). Исключение пока — `get/update/archive-account` и `update/archive-category` по id: принадлежность домохозяйству там не проверяется. Котировки ISS отдаёт с задержкой 15 минут; при недоступности ISS `get-portfolio-value` не падает, а возвращает позиции в `unpriced` и `quotesError`.
 
 Имя tool'а = имя файла use-case'а в `packages/core/src/application/`, 1:1 — описание и точную схему аргументов смотри там же или через `tools/list`.
 

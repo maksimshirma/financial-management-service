@@ -25,3 +25,11 @@ export class ForbiddenError extends Error {
     this.name = "ForbiddenError";
   }
 }
+
+/** The exchange / market data source couldn't be reached or answered with an error. */
+export class MarketDataUnavailableError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "MarketDataUnavailableError";
+  }
+}

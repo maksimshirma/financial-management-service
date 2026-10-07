@@ -1,10 +1,15 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Clock, TransactionRepository, transferBetweenAccounts } from "@fms/core";
+import {
+  AccountRepository,
+  Clock,
+  TransactionRepository,
+  transferBetweenAccounts,
+} from "@fms/core";
 
 export function registerTransferBetweenAccountsTool(
   server: McpServer,
-  deps: { transactionRepo: TransactionRepository; clock: Clock },
+  deps: { transactionRepo: TransactionRepository; accountRepo: AccountRepository; clock: Clock },
 ) {
   server.registerTool(
     "transfer-between-accounts",
@@ -13,6 +18,7 @@ export function registerTransferBetweenAccountsTool(
         "Move money from one of the user's own accounts to another (e.g. topping up a brokerage account from a checking account). Not for paying external parties — use record-income-expense with an expense category for that.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household acting; only its own accounts, categories and securities can be used."),
         accountId: z.number().describe("The source account money is taken from."),
         toAccountId: z
           .number()

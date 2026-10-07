@@ -41,6 +41,10 @@ module.exports = {
       testMatch: ["<rootDir>/src/**/__jest__/**/*.test.ts"],
       transform: { "^.+\\.(t|j)s$": swcTransform },
       moduleNameMapper: stripJsExtension,
+      // kysely and jose ship ESM only — let swc turn them into CommonJS too
+      transformIgnorePatterns: ["node_modules/\\.pnpm/(?!(kysely@|jose@))"],
+      // route tests run against the real finances_test database, like @fms/db
+      globalSetup: "<rootDir>/src/__jest__/global-setup.ts",
     },
     {
       displayName: "@fms/moex",

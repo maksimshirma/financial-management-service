@@ -1,10 +1,14 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { TradeRepository, updateTrade } from "@fms/core";
+import {
+  AccountRepository,
+  TradeRepository,
+  updateTrade,
+} from "@fms/core";
 
 export function registerUpdateTradeTool(
   server: McpServer,
-  deps: { tradeRepo: TradeRepository },
+  deps: { tradeRepo: TradeRepository; accountRepo: AccountRepository },
 ) {
   server.registerTool(
     "update-trade",
@@ -13,6 +17,7 @@ export function registerUpdateTradeTool(
         "Correct one or more fields on an existing trade. The account and security a trade belongs to can't be changed — delete and re-create the trade if those are wrong.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household acting; only its own accounts, categories and securities can be used."),
         tradeId: z.number().describe("The id of the trade to update."),
         date: z.coerce.date().optional().describe("New trade date, replacing the current one."),
         quantity: z.number().optional().describe("New quantity, replacing the current one."),

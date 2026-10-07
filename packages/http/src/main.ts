@@ -9,6 +9,7 @@ import {
   KyselyTransactionRepository,
 } from "@fms/db";
 import { MoexMarketDataProvider } from "@fms/moex";
+import { createJwks } from "./auth/verify-token.js";
 import { createServer, type ServerDeps } from "./server.js";
 
 async function main() {
@@ -39,7 +40,7 @@ async function main() {
     );
   }
 
-  const app = createServer(deps, { identityServiceUrl });
+  const app = createServer(deps, { jwks: createJwks(identityServiceUrl) });
   const port = Number(getEnv("PORT") ?? "3000");
   app.listen(port, () => {
     console.error(`fms HTTP server listening on :${port}`);

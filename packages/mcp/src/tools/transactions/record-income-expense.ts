@@ -1,10 +1,21 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Clock, recordIncomeExpense, TransactionRepository } from "@fms/core";
+import {
+  AccountRepository,
+  CategoryRepository,
+  Clock,
+  recordIncomeExpense,
+  TransactionRepository,
+} from "@fms/core";
 
 export function registerRecordIncomeExpenseTool(
   server: McpServer,
-  deps: { transactionRepo: TransactionRepository; clock: Clock },
+  deps: {
+    transactionRepo: TransactionRepository;
+    accountRepo: AccountRepository;
+    categoryRepo: CategoryRepository;
+    clock: Clock;
+  },
 ) {
   server.registerTool(
     "record-income-expense",
@@ -13,6 +24,7 @@ export function registerRecordIncomeExpenseTool(
         "Record a single income or expense transaction on an account (salary, groceries, a dividend or coupon payment, etc). The amount is always positive — whether it counts as income or expense is determined entirely by the category. For dividends/coupons, use an income category and mention the security in the note.",
       annotations: { readOnlyHint: false },
       inputSchema: {
+        householdId: z.string().describe("The id of the household acting; only its own accounts, categories and securities can be used."),
         accountId: z.number().describe("The account money was received into or spent from."),
         amount: z.number().describe("The transaction amount, always positive, in the account's currency."),
         categoryId: z

@@ -1,3 +1,5 @@
+import { MarketDataUnavailableError } from "@fms/core";
+
 export type FetchFn = (url: string, init?: { signal?: AbortSignal }) => Promise<Response>;
 
 export interface IssClientOptions {
@@ -13,7 +15,8 @@ type Row = Record<string, unknown>;
 type IssBlock = { columns: string[]; data: unknown[][] };
 type IssResponse = Record<string, IssBlock | undefined>;
 
-export class IssError extends Error {
+/** ISS-specific failure; adapters only need to know the core error it extends. */
+export class IssError extends MarketDataUnavailableError {
   constructor(message: string) {
     super(message);
     this.name = "IssError";
