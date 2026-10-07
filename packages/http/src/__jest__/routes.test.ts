@@ -19,6 +19,8 @@ import {
 } from "@fms/db";
 import { testDatabaseConfig, truncateAllTables } from "@fms/fixtures";
 import { APP_ID } from "../auth/verify-token";
+import { routeSpecs, type RouteSpec } from "../dto/openapi";
+import { ErrorResponse } from "../dto/schemas";
 import { createServer } from "../server";
 
 const db = createKyselyInstance(testDatabaseConfig());
@@ -90,7 +92,31 @@ async function call(method: string, path: string, hid?: string, body?: unknown, 
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const text = await res.text();
-  return { status: res.status, body: text ? JSON.parse(text) : undefined };
+  const result = { status: res.status, body: text ? JSON.parse(text) : undefined };
+  assertDocumented(method, path, result);
+  return result;
+}
+
+// Keeps /openapi.json honest: every call must hit a documented route, answer
+// with a documented status, and match the documented body schema.
+function findSpec(method: string, path: string): RouteSpec | undefined {
+  const pathname = path.split("?")[0];
+  return routeSpecs
+    .filter((spec) => spec.method === method.toLowerCase())
+    .find((spec) => new RegExp(`^${spec.path.replace(/\{\w+\}/g, "[^/]+")}$`).test(pathname));
+}
+
+function assertDocumented(method: string, path: string, { status, body }: { status: number; body: unknown }) {
+  const spec = findSpec(method, path);
+  if (!spec) throw new Error(`${method} ${path} is not described in the OpenAPI document`);
+
+  const [successStatus, schema] = spec.success;
+  if (status === successStatus) {
+    if (schema) schema.parse(body);
+    return;
+  }
+  expect([400, 401, 403, ...(spec.errors ?? [])]).toContain(status);
+  ErrorResponse.parse(body);
 }
 
 async function seedAccount(hid: string, name = "Broker") {

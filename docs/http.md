@@ -13,6 +13,16 @@ docker compose --profile http up -d http                           # через 
 
 Переменные: `POSTGRES_*`, `PORT` (по умолчанию 3000), `IDENTITY_SERVICE_URL` — базовый URL identity-service, ключи берутся с `{IDENTITY_SERVICE_URL}/jwks.json`.
 
+## Swagger / OpenAPI
+
+- `GET /docs` — Swagger UI, `GET /openapi.json` — спецификация OpenAPI 3.0. Обе доступны без токена; запросы из UI всё равно требуют токен: кнопка **Authorize** → значение `Internal <jwt>` целиком, с префиксом.
+- Спецификация генерируется из тех же zod-схем, которыми маршруты валидируют вход (`packages/http/src/dto/schemas.ts`, `@asteasolutions/zod-to-openapi`). Список маршрутов с описаниями — `routeSpecs` в `packages/http/src/dto/openapi.ts`; `operationId` = имя use-case'а.
+- Расхождение кода и спеки ловят тесты:
+  - `openapi.test.ts` — каждый маршрут Express описан в `routeSpecs`, и наоборот;
+  - `routes.test.ts` — каждый ответ проверяется на документированный статус и схему тела.
+
+Новый маршрут = схемы в `dto/schemas.ts` + строка в `routeSpecs` + handler в `routes/`.
+
 ## Аутентификация и домохозяйство
 
 - Заголовок `Authorization: Internal <jwt>`. Токен — EdDSA, `aud = "financial-management"`, claims `hid` (домохозяйство) и `scope`.

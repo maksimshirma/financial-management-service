@@ -20,8 +20,8 @@ pnpm workspace packages under `packages/` (main ones below):
   - `src/iss-client.ts` (HTTP, retries, cursor pagination), `src/moex-market-data-provider.ts`, `src/mappers.ts` (ISS types/currencies → domain), `src/ttl-cache.ts`.
   - Tests use recorded ISS responses in `__jest__/fixtures/` — no network.
 
-- **`@fms/http`** — HTTP API adapter. Deps: `@fms/core`, `@fms/db`.
-  - `src/server.ts`, `src/routes/`, `src/dto/` (request/response mapping), `src/main.ts` (composition root: wires `@fms/db` repos into `@fms/core` use-cases, starts server).
+- **`@fms/http`** — HTTP API adapter. Deps: `@fms/core`, `@fms/db`, `@fms/moex`.
+  - `src/server.ts`, `src/routes/`, `src/dto/` (zod request/response schemas + OpenAPI document served at `/openapi.json`, Swagger UI at `/docs`), `src/main.ts` (composition root: wires `@fms/db` repos into `@fms/core` use-cases, starts server).
 
 - **`@fms/mcp`** — MCP server adapter for the AI agent. Deps: `@fms/core`, `@fms/db`.
   - `src/server.ts`, `src/tools/`, `src/resources/`, `src/main.ts` (composition root, same pattern as http).
@@ -48,7 +48,7 @@ mcp   ← core, db, moex
 | New business rule/invariant         | `core/src/domain`                                                                                 |
 | Orchestration used by both adapters | `core/src/application/<feature>/<verb-noun>.ts`                                                   |
 | New persistence need                | add method to interface in `core/src/application/ports`, implement in `db/src/repositories`       |
-| New HTTP endpoint                   | thin handler in `http/src/routes`: parse input, call one use-case, map result — no business logic |
+| New HTTP endpoint                   | thin handler in `http/src/routes`: parse input, call one use-case, map result — no business logic; zod schemas in `http/src/dto/schemas.ts` + entry in `routeSpecs` (`http/src/dto/openapi.ts`) — tests fail otherwise |
 | New MCP tool                        | thin handler in `mcp/src/tools`: same pattern                                                     |
 | New external data source / API      | port interface in `core/src/application/ports`, implementation in its own package (like `@fms/moex`) |
 
